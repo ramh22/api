@@ -1,0 +1,36 @@
+{
+  "name": "myapi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "start": "node server.js",
+    "server": "nodemon server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "json": "^11.0.0",
+    "jsonwebtoken": "^9.0.0",
+    "mailtrap": "^3.1.1",
+    "mongoose": "^7.0.4",
+    "morgan": "^1.10.0",
+    "nodemailer": "^6.9.1",
+    "process": "^0.11.10",
+    "util": "^0.12.5",
+    "validator": "^13.9.0",
+    "xss": "^1.0.14"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  },
+  "engines": {
+    "node": ">=10.0.0"
+  }
+}
