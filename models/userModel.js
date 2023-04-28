@@ -173,12 +173,3 @@ const User = mongoose.model("User", userSchema);
 
 module.exports =User;
 
-/**
- * echo "# api" >> README.md
-git init
-git add README.md
-git commit -m "first commit"
-git branch -M main
-git remote add origin https://github.com/ramh22/api.git
-git 
- */

@@ -9,3 +9,13 @@ const server = http.createServer(app);
 server.listen(PORT, console.log(`Server is up and running on port ${PORT}`));
  //— an object with a parsed key if successful or error key if an error occurred.
  // example: { parsed: { KEY: 'value' } }
+
+ /**
+ * echo "# api" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/ramh22/api.git
+git 
+ */
