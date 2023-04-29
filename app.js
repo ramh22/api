@@ -33,6 +33,7 @@ app.use('/',userRoutes);
     next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
   });
   */
+ 
   app.use((req, res, next) => {
     const err = new Error(`Route ${req.originalUrl} not found`);
     err.status='fail';
@@ -54,7 +55,6 @@ app.use('/',userRoutes);
       message:err.message,
     });
   });
-
   //404 handler
   //export const notFound = 
 /*app.use((req, res, next) => {
