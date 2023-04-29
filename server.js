@@ -17,7 +17,7 @@ git add README.md
 git commit -m "first commit"
 git branch -M mainhttps://github.com/ramh22/MyAPI.git
 git@github.com:ramh22/MyAPI.git
-
+https://github.com/ramh22/craft2.git
 git remote add origin https://github.com/ramh22/api.git
 git 
  */
