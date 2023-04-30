@@ -3,6 +3,7 @@ const mongoose=require('mongoose');
 const dotenv=require('dotenv').config({path:`${__dirname}/problem`}); 
 const crypto=require('crypto');
 const bcrypt=require('bcryptjs');
+const http=require('http');
 const User =require('../models/userModel');
 const {promisify}=require('util');
 const catchAsync=require('./../utils/catchAsync');
@@ -110,8 +111,8 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
    user.resetToken();
   await user.save({ validateBeforeSave: false });
   // 3) Send it to user's email
-  const resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${resetToken}`;
-
+  const resetURL = `http://${req.get('host')}/api/v1/users/resetPassword/${resetToken}`;
+  
   const message = `Submit a PATCH request with your new password and passwordConfirm to: ${resetURL}. `;
   try {
     await sendEmail({

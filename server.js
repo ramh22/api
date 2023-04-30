@@ -19,6 +19,6 @@ git branch -M mainhttps://github.com/ramh22/MyAPI.git
 git@github.com:ramh22/MyAPI.git
 https://github.com/ramh22/craft2.git
 C:\Users\RAZER\Downloads\New folder\craft2
-git remote add origin https://github.com/ramh22/api.git
+git remote add origin  
 git 
  */
