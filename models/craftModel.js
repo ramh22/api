@@ -10,7 +10,7 @@ const craftSchema=new mongoose.Schema(
         type:String,
         required:[true,'a craft must have a name'],//validate,
         unique:true,
-        enum:["نجار", "سباك", "كهربائي", "نقاش", "عامل نظافة", "حداد", "صيانة اجهزة كهربائية", "عامل بناء"],
+        //enum:["نجار", "سباك", "كهربائي", "نقاش", "عامل نظافة", "حداد", "صيانة اجهزة كهربائية", "عامل بناء"],
         trim:true,
          maxLength:[40,'less or equal 40 character'],
          minLength:[3,'more or equal 3 character'],

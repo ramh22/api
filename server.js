@@ -4,7 +4,7 @@ const app=require ('./app');
 //dotenv.config();//read environment variable before start the app
 //create the server
 
-const PORT = process.env.PORT || 2030;
+const PORT = process.env.PORT ||2030;
 const server = http.createServer(app);
 server.listen(PORT, console.log(`Server is up and running on port ${PORT}`));
  //— an object with a parsed key if successful or error key if an error occurred.

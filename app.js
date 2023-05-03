@@ -23,7 +23,6 @@ app.use((req,res,next)=>{
     req.requestTime = new Date().toISOString();
     next();
 });
-//app.use('/api/v1/users', userRouter);
 
 app.use('/api/v1/users',userRoutes);
 app.use('/api/v1/crafts',craftRoutes);
@@ -32,7 +31,7 @@ app.use('/api/v1/crafts',craftRoutes);
   app.all('*', (req, res, next) => {
     next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
   });
-/*
+
   app.use((req, res, next) => {
     const err = new Error(`Route ${req.originalUrl} not found`);
     err.status='fail';
@@ -51,7 +50,7 @@ app.use('/api/v1/crafts',craftRoutes);
       status:err.status,
       message:err.message,
     });
-  });*/
+  });
  
   
 //app.use(globalErrorHandler);

@@ -1,5 +1,6 @@
 const Craft =require('./../models/craftModel');
 const catchAsync=require('./../utils/catchAsync');
+const AppError=require('./../utils/AppError');
 const cloudinary=require('./../config/cloudinary');
 const upload=require('../config/multer');
 const path=require('path');
@@ -9,15 +10,12 @@ exports.getAllCrafts= catchAsync(async(req,res,next)=>{
     res.status(200).json(
         {
         status :'success',
-         result:crafts.length,
+        result:crafts.length,
              data:
              {
                 crafts
              },
         });
-    
-   
-    
     next();
  });
 exports.getCraft=catchAsync(async(req,res,next)=>{
@@ -55,14 +53,13 @@ exports.updateCraft=async(req,res,next)=>{
                        });}
              next();
         } ;
-exports.createCraft = catchAsync(async (req, res) => {
+exports.createCraft = catchAsync(async (req, res,next) => {
 
     //craft exists
     const craftFound = await Craft.findOne({ name:req.body.name });
         if (craftFound) {
             return next(new AppError("Craft already exists",401));
             }
-    console.log(req.file);
         // Upload image to cloudinary
         const result = await cloudinary.uploader.upload(req.file.path);
     
@@ -73,13 +70,7 @@ exports.createCraft = catchAsync(async (req, res) => {
           cloudinary_id: result.public_id,
         });
     
-        
-            //create
-        //     const craft = await Craft.create({
-        //       name: name?.toLowerCase(),
-        //       image: req?.file?.path,
-        //     });
-          await craft.save();
+          await craft.save();//created at , updated at
             res.status(201).json({
               status: "success",
              data:{ 
@@ -108,3 +99,42 @@ exports.createCraft = catchAsync(async (req, res) => {
   }
 }
 }*/
+exports.updateCraft= catchAsync(async (req, res,next) => {
+    let craft = await Craft.findById(req.params.id);
+    // Delete image from cloudinary
+    await cloudinary.uploader.destroy(craft.cloudinary_id);
+    // Upload image to cloudinary
+    let result;
+    if (req.file) {
+      result = await cloudinary.uploader.upload(req.file.path);
+    }
+    const data = {
+      name: req.body.name || craft.name,
+      avatar: result?.secure_url || craft.avatar,
+      cloudinary_id: result?.public_id || craft.cloudinary_id,
+    };
+    craft = await Craft.findByIdAndUpdate(req.params.id, data, { new: true });
+    res.status(200).json({
+        status:'success',
+        data:{craft}
+      }
+        );
+  next();
+}); 
+
+exports.deleteCraft=catchAsync( async (req, res,next) => {
+        
+  // Find craft by id
+  let craft = await Craft.findById(req.params.id);///:id
+  // Delete image from cloudinary
+  await cloudinary.uploader.destroy(craft.cloudinary_id);
+  // Delete craft from db
+  //await craft.remove();
+  res.status(204).json({
+    status:'success',
+    data:{
+    craft:null
+},
+});
+next();
+}); 
