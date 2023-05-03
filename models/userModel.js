@@ -2,13 +2,14 @@ const crypto = require('crypto');
 const mongoose =require( 'mongoose');
 const validator = require('validator');
 const bcrypt =require( 'bcryptjs');
-//const Schema = mongoose.Schema;
 
-const userSchema = new  mongoose.Schema(
+
+const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
       required: [true, 'Please tell us your name!'],
+      trim:true,
     },
     email: {
         type: String,
@@ -28,12 +29,14 @@ const userSchema = new  mongoose.Schema(
         enum: ['client', 'worker', 'admin'],
         default: 'client',
         required: [true, 'Please tell us your role!'],
+        trim:true,
       },
     password: {
         type: String,
         required: [true, 'Please provide a password'],
         minlength: 12,
-        select: false
+        select: false,
+        trim:true,
       },
       passwordConfirm: {
         type: String,
@@ -44,25 +47,17 @@ const userSchema = new  mongoose.Schema(
             return el === this.password;
           },
           message: 'Passwords are not the same!'
-        }
+        },
+        trim:true,
       },
-      // hasCraft:{
-      //   type:Boolean,
-      //   default:false,
-      //    validate: {
-      //   //     // This only works on CREATE and SAVE!!!
-      //   validator :function(el){
-      //     if(this.role !=='worker'){
-      //     return this.hasACraft===null;}
-      //   }
-      //   //     message: 'Passwords are not the same!'
-      //   //   }
+      
     
        myCraft:{
         type:String,
         enum:['عميل','بناء','نجارة','نقاشة','حدادة','سباكة','تنظيف','كهرباء','اجهزة كهربائية'],
         unique:true,
         required:true,
+        trim:true,
       },
       passwordChangedAt: Date,
       passwordResetToken: String,
@@ -95,7 +90,9 @@ const userSchema = new  mongoose.Schema(
       type: Boolean,
       default: false,
     },
-   
+    tokens: [
+      { type: Object }
+    ],
     
   
     

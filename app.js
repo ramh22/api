@@ -8,6 +8,7 @@ const ErrorRequestHandler=require('./utils/ErrorRequestHandler');
 const globalErrorHandler=require('./controllers/errorController');
 const dbConnect=require('./config/dbConnect');
 const userRoutes =require( './routes/usersRoute');
+const craftRoutes =require( './routes/craftsRoute');
 // start the express app
 
 dbConnect();
@@ -22,18 +23,16 @@ app.use((req,res,next)=>{
     req.requestTime = new Date().toISOString();
     next();
 });
+//app.use('/api/v1/users', userRouter);
 
-app.use('/',userRoutes);
+app.use('/api/v1/users',userRoutes);
+app.use('/api/v1/crafts',craftRoutes);
 // xss secure
-/*app.all('*', (req, res, next) => {
-    // res.status(404).json({
-    // status:'fail',
-    // message:`Can't find ${req.originalUrl}on this server!`
-    // });
+
+  app.all('*', (req, res, next) => {
     next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
   });
-  */
- 
+/*
   app.use((req, res, next) => {
     const err = new Error(`Route ${req.originalUrl} not found`);
     err.status='fail';
@@ -47,21 +46,13 @@ app.use('/',userRoutes);
     //message
     err.statusCode=err.statusCode||500;
     err.status=err.status||'error';
-    // const stack = err?.stack;
-    // const statusCode = err?.statusCode ? err?.statusCode : 500;
-    // const message = err?.message;
+    
     res.status(err.statusCode).json({
       status:err.status,
       message:err.message,
     });
-  });
-  //404 handler
-  //export const notFound = 
-/*app.use((req, res, next) => {
-    const err = new Error(`Route ${req.originalUrl} not found`);
-    next(err);
-  });
-  */
+  });*/
+ 
   
 //app.use(globalErrorHandler);
 //app.use(ErrorRequestHandler);

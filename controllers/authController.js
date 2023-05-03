@@ -80,7 +80,26 @@ exports.protect = catchAsync(async (req, res, next) => {
     }
     // 2) Verification token
     //The payload is what was used to sign the token.
-  const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+  const decoded = await promisify(jwt.verify)(token, process.env.JWT_KEY);
+    // 3) Check if user still exists
+    const currentUser = await User.findById(decoded.id);
+    if (!currentUser) {
+      return next(
+        new AppError(
+          'The user belonging to this token does no longer exist.',
+          401
+        )
+      );
+    }
+    // 4) Check if user changed password after the token was issued
+    if (currentUser.changedPasswordAfter(decoded.iat)) {
+      return next(
+        new AppError('User recently changed password! Please log in again.', 401)
+      );
+    }
+    // GRANT ACCESS TO PROTECTED ROUTE
+    req.user = currentUser;
+    next();
 
 });
 exports.restrictTo = (...roles) => {
@@ -183,3 +202,64 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
  
  */
 
+/**
+
+const jwt = require('jsonwebtoken');
+
+function logout(req, res, next) {
+  // Get the token from the request header
+  const token = req.headers.authorization.split(' ')[1];
+
+  // Verify the token and get the payload
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    // Add the token to a blacklist or revoke it in some way
+    // ...
+
+    // Send a response indicating successful logout
+    res.json({ message: 'Logged out successfully' });
+  });
+}
+
+module.exports = logout;
+```
+
+In this example,
+ we first extract the JWT from the `Authorization` header of the request.
+  We then verify the token using `jwt.verify()` and check for any errors. 
+  If there are no errors, 
+  we can add the token to a blacklist or revoke it in some way to prevent it from being used again.
+   Finally, we send a response indicating that the user has been logged out successfully.
+
+To use this middleware function in your Express app,
+ you can simply import it and add it as a route handler:
+
+```
+const express = require('express');
+const logout = require('./logout');
+
+const app = express();
+
+app.post('/logout', logout);
+```
+exports.signOut = async (req, res) => {
+  if (req.headers && req.headers.authorization) {
+    const token = req.headers.authorization.split(' ')[1];
+    if (!token) {
+      return res
+        .status(401)
+        .json({ success: false, message: 'Authorization fail!' });
+    }
+
+    const tokens = req.user.tokens;
+
+    const newTokens = tokens.filter(t => t.token !== token);
+
+    await User.findByIdAndUpdate(req.user._id, { tokens: newTokens });
+    res.json({ success: true, message: 'Sign out successfully!' });
+  }
+};
+ */
