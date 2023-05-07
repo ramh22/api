@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema(
     email: {
         type: String,
         required: [true, 'Please provide your email'],
-        unique: true,
+        unique: [true,'the email is exist already'],
         lowercase: true,
         trim:true,
         validate: [validator.isEmail, 'Please provide a valid email'],
@@ -23,6 +23,7 @@ const userSchema = new mongoose.Schema(
         type: String,
         trim:true,
         //enum:['مركز الفيوم', 'مركز يوسف الصديق', 'مركز طامية', 'مركز سنورس', 'مركز إطسا', 'مركز إبشواي']
+        required:true,
       },
     role: {
         type: String,
@@ -50,15 +51,25 @@ const userSchema = new mongoose.Schema(
         },
         trim:true,
       },
-      
-    
-       myCraft:{
-        type:String,
-        //enum:["نجار", "سباك", "كهربائي", "نقاش", "عامل نظافة", "حداد", "صيانة اجهزة كهربائية", "عامل بناء","عميل"],
-        unique:true,
-        required:true,
-        trim:true,
-      },
+      // push craft name in this array 
+      //  crafts: [
+      //   {
+      //     type: mongoose.Schema.Types.ObjectId,
+      //     ref: "Craft",
+      //   },
+      // ],
+       //{
+        // type:String,
+        // enum:["","نجار", "سباك", "كهربائي", "نقاش", "عامل نظافة", "حداد", "صيانة اجهزة كهربائية", "عامل بناء","عميل"],
+        // unique:true,
+      //},
+      myCraft:
+        {
+          type:String,
+          default:null,
+          
+        },
+
       passwordChangedAt: Date,
       passwordResetToken: String,
       passwordResetExpires: Date,
@@ -67,7 +78,8 @@ const userSchema = new mongoose.Schema(
         default: true,
         select: false
       },
-    photo: String,
+      avatar:String,
+      cloudinary_id:String,  
     orders: [
       {
         type: mongoose.Schema.Types.ObjectId,

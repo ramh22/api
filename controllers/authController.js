@@ -16,7 +16,7 @@ const signToken = id => {
     return jwt
         .sign({ id },
             process.env.JWT_KEY  ,
-        {expiresIn:60});
+        {expiresIn:"100d"});
     };
     const createSendToken = (user, statusCode, res) => {
         const token = signToken(user._id);
@@ -29,13 +29,14 @@ const signToken = id => {
         });
     }
 exports.register=catchAsync(async(req,res)=>{
-    const { name, email,address,role,myCraft,password,passwordConfirm} = req.body;
+   // const { name, email,address,role,myCraft,password,passwordConfirm} = req.body;
+    const { name, email,address,role,password,passwordConfirm} = req.body;
     const user = await User.create({
         name,
         email,
         address,
         role,
-        myCraft,
+        //myCraft,
         password,
         passwordConfirm,
       });
