@@ -27,17 +27,19 @@ const orderSchema = new mongoose.Schema(
       trim:true,
       required:true,
   },
-  avatar:String,
-  cloudinary_id:String,
+  avatar:{type:String,
+default:null},
+  cloudinary_id:{type:String,
+    default:null},
   user:{
       type:mongoose.Schema.ObjectId,
       ref:'User',
      // required:[true,'order must belong to a user']
       },
   craft:{
-          type:mongoose.Schema.ObjectId,
+          type:mongoose.Schema.Types.ObjectId,
           ref:'Craft',
-         // required:[true,'order must belong to a craft']
+         required:[true,'order must belong to a craft']
           },    
   rating:{
       type:mongoose.Schema.ObjectId,
@@ -63,8 +65,7 @@ const orderSchema = new mongoose.Schema(
   offers:[
       {
           type:mongoose.Schema.ObjectId,
-              ref:'Offer',
-              
+              ref:'Offer',  
           },
   ],
   

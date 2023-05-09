@@ -7,7 +7,7 @@ exports.isLoggedIn = (req, res, next) => {
   //verify the token
   const decodedUser = verifyToken(token);
   if (!decodedUser) {
-    throw new Error("Invalid/Expired token, please login again");//this murderer
+    return next(new AppError("Invalid/Expired token, please login again",500));//this murderer
   } else {
     //save the user into req obj
     req.userAuthId = decodedUser?.id;

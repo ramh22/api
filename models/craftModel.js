@@ -38,5 +38,10 @@ const craftSchema=new mongoose.Schema(
         ,toJSON:{virtuals:true}},
     {toObject:{virtuals:true}}
     );
+    craftSchema.virtual('order',{
+      ref:'Order',
+      foreignField:'Craft',
+      localField:'_id'
+  });
     const Craft = mongoose.model('Craft',craftSchema);
 module.exports =Craft; 

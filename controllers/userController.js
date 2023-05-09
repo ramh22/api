@@ -1,8 +1,9 @@
 const User =require( './../models/userModel');
 const Craft =require( './../models/craftModel');
 const catchAsync=require('./../utils/catchAsync');
-
-exports.getUser=catchAsync(async(req,res)=>{});  
+const AppError=require('./../utils/AppError');
+const isLogIn=require('../utils/isLoggedIn');
+//exports.getUser=catchAsync(async(req,res,next)=>{});  
 
  exports.myCraft=catchAsync(async(req,res,next)=>{
     const { myCraft } = req.body;
@@ -12,15 +13,23 @@ exports.getUser=catchAsync(async(req,res)=>{});
       req.params.id,
       {
         myCraft,
+        
       },
       {
         new: true,
+        runValidators:true,//validate the update operation agienest model's schema
       }
     );
-    res.json({
+  //   craftName=await Craft.findOne({ name:req.body.name });
+  //   if(myCraft !== craftName)
+  //  // if (!myCraft)
+  //    {
+  //       return next(new AppError("Craft name does not exist",401));
+  //       }
+
+    res.status(201).json({
       status: "success",
-      message: " user updated successfully",
-      user,
+    user,
     });
     next();
   });

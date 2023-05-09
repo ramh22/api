@@ -28,7 +28,7 @@ const signToken = id => {
             }
         });
     }
-exports.register=catchAsync(async(req,res)=>{
+exports.register=catchAsync(async(req,res,next)=>{
    // const { name, email,address,role,myCraft,password,passwordConfirm} = req.body;
     const { name, email,address,role,password,passwordConfirm} = req.body;
     const user = await User.create({
@@ -47,6 +47,7 @@ exports.register=catchAsync(async(req,res)=>{
     //     message: "User Registered Successfully",
     //     data: user,
     //   });
+    
 });
 exports.login=catchAsync(async(req,res,next)=>{
     const {email,password}= req.body;

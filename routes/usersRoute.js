@@ -2,6 +2,7 @@ const userController =require( './../controllers/userController');
 const authController =require( './../controllers/authController');
 const upload=require('../config/cloudinary');
 const express = require('express');
+const isLogIn = require('../utils/isLoggedIn');
 //const Router=express();
 const router=express.Router();
 
@@ -13,6 +14,7 @@ router.patch('/updatePassword',authController.protect,authController.updatePassw
 
 router.put('/:id',
 authController.protect,
+//isLogIn.isLoggedIn,
 authController.restrictTo('worker'),
 userController.myCraft);
 

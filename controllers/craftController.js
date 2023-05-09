@@ -34,8 +34,8 @@ exports.getCraft=catchAsync(async(req,res,next)=>{
                 });
             next();
         } );
-exports.updateCraft=async(req,res,next)=>{
-        try{
+exports.updateCraft= catchAsync(async(req,res,next)=>{
+        
             const craft= await Craft.findByIdAndUpdate(req.params.id,req.body({
                 new:true,//name :unique
                 runValidators:true,//validate the update operation agienest model's schema
@@ -43,16 +43,11 @@ exports.updateCraft=async(req,res,next)=>{
                 res.status(200).json({
                     status :'success',
                     data:{
-                         craft
+                         craft//:{name ,avatar}
                         }
-                    });}
-            catch(err){
-                res.status(404).json({
-                        status:'fail',
-                        message:err
-                       });}
+                    });
              next();
-        } ;
+        } );
 exports.createCraft = catchAsync(async (req, res,next) => {
 
     //craft exists
@@ -63,14 +58,12 @@ exports.createCraft = catchAsync(async (req, res,next) => {
         // Upload image to cloudinary
         const result = await cloudinary.uploader.upload(req.file.path);
     
-        // Create new craft
-        let craft = new Craft({
-          name: req.body.name,
-          avatar: result.secure_url,
-          cloudinary_id: result.public_id,
-        });
-    
-          await craft.save();//created at , updated at
+   const craft=await Craft.create({
+      name:req.body.name.replace(/['"]+/g, ""),
+         avatar: result.secure_url,
+        cloudinary_id: result.public_id,
+    })
+        //  await craft.save();//created at , updated at
           
             res.status(201).json({
               status: "success",
@@ -81,25 +74,7 @@ exports.createCraft = catchAsync(async (req, res,next) => {
         //   
     });  
     /*
-   async (req, res) => {
-  try {
-    // Upload image to cloudinary
-    const result = await cloudinary.uploader.upload(req.file.path);
-
-    // Create new user
-    let user = new User({
-      name: req.body.name,
-      avatar: result.secure_url,
-      cloudinary_id: result.public_id,
-    });
-    // Save user
-    await user.save();
-    res.json(user);
-  } catch (err) {
-    console.log(err);
-  }
-}
-}*/
+    */
 exports.updateCraft= catchAsync(async (req, res,next) => {
     let craft = await Craft.findById(req.params.id);
     // Delete image from cloudinary
