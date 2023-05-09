@@ -1,12 +1,27 @@
 const Craft =require('./../models/craftModel');
 const catchAsync=require('./../utils/catchAsync');
 const AppError=require('./../utils/AppError');
+const APIFeatures=require('./../utils/apiFeatures');
 const cloudinary=require('./../config/cloudinary');
 const upload=require('../config/multer');
 const path=require('path');
+
+exports.getCrafts = (req, res, next) => {
+ // req.query.limit = '5';
+ // req.query.sort = 'createdAt';
+  req.query.fields = 'name,avatar';
+  next();
+};
+
+
 exports.getAllCrafts= catchAsync(async(req,res,next)=>{
-    
-    const crafts= await Craft.find();
+  const features = new APIFeatures(Craft.find(), req.query)
+  .filter()
+  .sort()
+  .limitFields()
+  .paginate();
+const crafts = await features.query;
+    // crafts= await Craft.find();
     res.status(200).json(
         {
         status :'success',
@@ -34,16 +49,28 @@ exports.getCraft=catchAsync(async(req,res,next)=>{
                 });
             next();
         } );
+const filterObj = (obj, ...allowedFields) => {
+    const newObj = {};
+    Object.keys(obj).forEach(el => {
+          if (allowedFields.includes(el)) newObj[el] = obj[el];
+          });
+          return newObj;
+        };        
 exports.updateCraft= catchAsync(async(req,res,next)=>{
-        
-            const craft= await Craft.findByIdAndUpdate(req.params.id,req.body({
-                new:true,//name :unique
-                runValidators:true,//validate the update operation agienest model's schema
-                }));
+          // 2) Filtered out unwanted fields names that are not allowed to be updated
+  const filteredBody = filterObj(req.body, 'workers', 'orders');
+
+            const updateCraft= await Craft.findByIdAndUpdate(
+              req.craft.id, filteredBody,{
+                new: true,
+                runValidators: true
+              });
+               // new:true,//name :unique
+                //runValidators:true,//validate the update operation agienest model's schema}));
                 res.status(200).json({
                     status :'success',
                     data:{
-                         craft//:{name ,avatar}
+                         craft:updateCraft,//{name ,avatar}
                         }
                     });
              next();
@@ -114,3 +141,19 @@ exports.deleteCraft=catchAsync( async (req, res,next) => {
 });
 next();
 }); 
+/*
+
+exports.getAllCrafts= catchAsync(async(req,res,next)=>{
+    
+    const crafts= await Craft.find();
+    res.status(200).json(
+        {
+        status :'success',
+        result:crafts.length,
+             data:
+             {
+                crafts
+             },
+        });
+    next();
+ }); */

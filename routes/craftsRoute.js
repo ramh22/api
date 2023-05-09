@@ -6,9 +6,16 @@ const express = require('express');
 //const Router =express();
 const router=express.Router();
 
+
+
+router
+  .route('/')
+  .get(authController.protect,
+    authController.restrictTo('client','admin'),craftController.getCrafts, craftController.getAllCrafts);
+
 router.route('/:id')
 .get(authController.protect,
-    authController.restrictTo('admin','client'),
+    authController.restrictTo('worker','admin'),
     craftController.getCraft)
 .delete(
     authController.protect,
@@ -21,11 +28,11 @@ router.route('/:id')
     craftController.updateCraft
     );
 
-router.route('/')
-.get(
-    authController.protect,
-    authController.restrictTo('admin','client'),
-    craftController.getAllCrafts);
+// router.route('/')
+// .get(
+//     authController.protect,
+//     authController.restrictTo('admin','client'),
+//     craftController.getAllCrafts);
 
 router.post('/',
 authController.protect,
