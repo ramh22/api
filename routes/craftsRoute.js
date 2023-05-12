@@ -17,12 +17,12 @@ router
     craftController.getCrafts, 
     craftController.getAllCrafts);
 
-router.route('/:id')
-.get(authController.protect,
-    authController.restrictTo('client','admin','worker'),
-   // craftController.craft,
-    craftController.getCraft)
-.delete(
+   router.get('/:id',
+   authController.protect,
+        authController.restrictTo('client','admin','worker'),
+        //craftController.craft,
+        craftController.getCraft)
+router.route('/:id').delete(
     authController.protect,
     authController.restrictTo('admin','client'),
     craftController.deleteCraft)

@@ -12,12 +12,12 @@ exports.getCrafts = (req, res, next) => {
   req.query.fields = 'name,avatar';
   next();
 };
-exports.craft = (req, res, next) => {
-  // req.query.limit = '5';
-  // req.query.sort = 'createdAt';
-   req.query.fields = 'name,avatar';
-   next();
- };
+// exports.craft = (req, res, next) => {
+//   // req.query.limit = '5';
+//   // req.query.sort = 'createdAt';
+//    req.query.fields = 'name,avatar';
+//    next();
+//  };
 
 exports.getAllCrafts= catchAsync(async(req,res,next)=>{
   const features = new APIFeatures(Craft.find(), req.query)
@@ -71,10 +71,10 @@ if (!craft) {
                 status :'success',
                 data:
                  {
-                 craft
+                 craft:craft,
                  },
                 });
-            next();
+            
           });
 
 const filterObj = (obj, ...allowedFields) => {
