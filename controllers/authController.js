@@ -15,7 +15,7 @@ const jwt=require('jsonwebtoken');
 const signToken = id => {
     return jwt
         .sign({ id },
-            process.env.JWT_KEY  ,
+        process.env.JWT_KEY  ,
         {expiresIn:"100d"});
     };
     const createSendToken = (user, statusCode, res) => {
@@ -132,7 +132,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
    user.resetToken();
   await user.save({ validateBeforeSave: false });
   // 3) Send it to user's email
-  const resetURL = `http://${req.get('host')}/api/v1/users/resetPassword/${resetToken}`;
+  const resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${resetToken}`;
   
   const message = `Submit a PATCH request with your new password and passwordConfirm to: ${resetURL}. `;
   try {
@@ -219,8 +219,7 @@ function logout(req, res, next) {
     }
 
     // Add the token to a blacklist or revoke it in some way
-    // ...
-
+  
     // Send a response indicating successful logout
     res.json({ message: 'Logged out successfully' });
   });

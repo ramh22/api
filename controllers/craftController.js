@@ -12,7 +12,12 @@ exports.getCrafts = (req, res, next) => {
   req.query.fields = 'name,avatar';
   next();
 };
-
+exports.craft = (req, res, next) => {
+  // req.query.limit = '5';
+  // req.query.sort = 'createdAt';
+   req.query.fields = 'name,avatar';
+   next();
+ };
 
 exports.getAllCrafts= catchAsync(async(req,res,next)=>{
   const features = new APIFeatures(Craft.find(), req.query)
@@ -33,11 +38,33 @@ const crafts = await features.query;
         });
     next();
  });
-exports.getCraft=catchAsync(async(req,res,next)=>{
+
+/*exports.getCraft=catchAsync(async(req,res,next)=>
+{
+  const features = new APIFeatures(Craft.findById(req.params.id), req.query)
+  .filter()
+  .sort()
+  .limitFields()
+  .paginate();
+  //const popcar=
+  const craft = await features.query;//populate('orders')
+    const populatedCraft=  craft.populate('orders');//findById(req.params.id);
     
-            //const id=req.params.id*1;
-    const craft= await Craft.findById(req.params.id);
     if (!craft) {
+        return next(new AppError('No craft found with that ID', 404));
+      }
+        res.status(200).json({
+                status :'success',
+                data:
+                 {
+               craft:populatedCraft
+                 },
+                });
+            next();
+ } );*/
+ exports.getCraft=catchAsync(async(req,res,next)=>{
+const craft= await Craft.findById(req.params.id).populate('orders');
+if (!craft) {
         return next(new AppError('No craft found with that ID', 404));
       }
         res.status(200).json({
@@ -48,7 +75,8 @@ exports.getCraft=catchAsync(async(req,res,next)=>{
                  },
                 });
             next();
-        } );
+          });
+
 const filterObj = (obj, ...allowedFields) => {
     const newObj = {};
     Object.keys(obj).forEach(el => {
@@ -132,7 +160,7 @@ exports.deleteCraft=catchAsync( async (req, res,next) => {
   // Delete image from cloudinary
   await cloudinary.uploader.destroy(craft.cloudinary_id);
   // Delete craft from db
-  //await craft.remove();
+  await craft.remove();
   res.status(204).json({
     status:'success',
     data:{

@@ -7,10 +7,7 @@ const craft=require('./../models/craftModel');
 
 const orderSchema = new mongoose.Schema(
   {
-    createDate:{
-      type:Date,
-      default:Date.now(),//timestamp
-  },
+    
   title:{
       type:String,
       required:[true,'ادخل العنوان من فضلك'],//validate
@@ -28,16 +25,16 @@ const orderSchema = new mongoose.Schema(
       required:true,
   },
   avatar:{type:String,
-default:null},
+         },
   cloudinary_id:{type:String,
-    default:null},
+    },
   user:{
       type:mongoose.Schema.ObjectId,
       ref:'User',
-     // required:[true,'order must belong to a user']
+     required:[true,'order must belong to a user']
       },
   craft:{
-          type:mongoose.Schema.Types.ObjectId,
+          type:mongoose.Schema.ObjectId,
           ref:'Craft',
          required:[true,'order must belong to a craft']
           },    
@@ -77,10 +74,23 @@ default:null},
 {toJSON:{virtuals:true}},
 {toObject:{virtuals:true}}
 ); 
-orderSchema.virtual('crafts',{
-    ref:'Craft',
-    foreignField:'Order',
-    localField:'name'
-});
+// orderSchema.virtual('crafts',{
+//     ref:'Craft',
+//     foreignField:'Order',
+//     localField:'_id'
+// });
+orderSchema.pre(/^find/, function(next) {
+    this.populate({
+      
+      path: 'user',
+      select: 'name'
+    });
+  
+    // this.populate({
+    //   path: 'user',
+    //   select: 'name photo'
+    // });
+    next();
+  });
 const Order = mongoose.model('Order',orderSchema);
 module.exports =Order; 

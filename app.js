@@ -15,12 +15,14 @@ const orderRoutes =require( './routes/ordersRoute');
 
 dbConnect();
 const app=express();
+
 // Development logging
 if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
   }
 app.use(express.json());
-
+   //body parser
+   app.use(express.urlencoded({extended:false}));
 app.use((req,res,next)=>{
     req.requestTime = new Date().toISOString();
     next();
@@ -31,8 +33,9 @@ app.use('/api/v1/crafts',craftRoutes);
 app.use('/api/v1/orders',orderRoutes);
 // xss secure
 
+  //route not found
   app.all('*', (req, res, next) => {
-     next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));//update here by return
+    return next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));//update here by return
   });
 
   app.use((req, res, next) => {
@@ -53,9 +56,11 @@ app.use('/api/v1/orders',orderRoutes);
       status:err.status,
       message:err.message,
     });
+     
   });
  
   
+
 //app.use(globalErrorHandler);
 //app.use(ErrorRequestHandler);
 module.exports=app;

@@ -1,4 +1,5 @@
-exports.getTokenFromHeader = (req) => {
+exports.getTokenFromHeader = (req) =>//(req,res,next)=>
+{
     //get token from header
     const token = req?.headers?.authorization?.split(" ")[1]; 
     //const token = req.headers.authorization.split(" ")[1];

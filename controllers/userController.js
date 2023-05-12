@@ -7,9 +7,8 @@ const isLogIn=require('../utils/isLoggedIn');
 
  exports.myCraft=catchAsync(async(req,res,next)=>{
     const { myCraft } = req.body;
-  
     //update
-    const user = await  User.findByIdAndUpdate(
+    const user = await User.findByIdAndUpdate(
       req.params.id,
       {
         myCraft,
@@ -20,13 +19,6 @@ const isLogIn=require('../utils/isLoggedIn');
         runValidators:true,//validate the update operation agienest model's schema
       }
     );
-  //   craftName=await Craft.findOne({ name:req.body.name });
-  //   if(myCraft !== craftName)
-  //  // if (!myCraft)
-  //    {
-  //       return next(new AppError("Craft name does not exist",401));
-  //       }
-
     res.status(201).json({
       status: "success",
     user,
