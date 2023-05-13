@@ -152,23 +152,26 @@ exports.updateCraft= catchAsync(async (req, res,next) => {
         );
   next();
 }); 
-
 exports.deleteCraft=catchAsync( async (req, res,next) => {
         
   // Find craft by id
   let craft = await Craft.findById(req.params.id);///:id
+  if(!craft){
+    return next(new AppError("Craft not  exists",401));
+  }
+  
   // Delete image from cloudinary
   await cloudinary.uploader.destroy(craft.cloudinary_id);
   // Delete craft from db
-  await craft.remove();
+  await craft.deleteOne();
+  //await craft.findByIdAndDelete(req.params.id);
   res.status(204).json({
     status:'success',
-    data:{
-    craft:null
-},
+    data:null,
 });
-next();
+//next();
 }); 
+
 /*
 
 exports.getAllCrafts= catchAsync(async(req,res,next)=>{
