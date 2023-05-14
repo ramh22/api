@@ -125,8 +125,7 @@ exports.createOrder = catchAsync(async (req, res,next) => {
     cloudinary_id: result.public_id,
     craft:req.params.craftId,
     user:req.user.id,
-    //craftID:craftFound?._id,
-    //user:req.userAuthId,
+ 
   });
   //Push order into craft Found
   //craftFound.orders.push(order?._id);
@@ -139,4 +138,23 @@ exports.createOrder = catchAsync(async (req, res,next) => {
    }
   });
   next();
+});
+
+exports.deleteOrder=catchAsync( async (req, res,next) => {
+        
+  // Find craft by id
+  let order = await Order.findById(req.params.id);///:id
+  if(!order){
+    return next(new AppError("order not  exists",401));
+  }
+  
+  // Delete image from cloudinary
+  await cloudinary.uploader.destroy(order.cloudinary_id);
+  // Delete craft from db
+  await order.deleteOne();
+  //await craft.findByIdAndDelete(req.params.id);
+  res.status(204).json({
+    status:'success',
+    data:null,
+});
 });

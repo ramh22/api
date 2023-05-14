@@ -10,6 +10,7 @@ const router=express.Router();
 
 
 router.use('/:craftId/orders',orderRoutes);
+router.use('/:craftId/orders/:id',orderRoutes);
 router
   .route('/')
   .get(authController.protect,

@@ -21,8 +21,7 @@ upload.single('image'),
 //orderController.setCraftUserIds,
 orderController.createOrder);
 
-router.route('/:id')
-.delete(authController.protect,
+router.route('/:id').delete(authController.protect,
     authController.restrictTo('client','admin') ,
     orderController.deleteOrder);
 module.exports= router;
