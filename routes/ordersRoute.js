@@ -8,7 +8,7 @@ const express = require('express');
 
 const router=express.Router({mergeParams:true});
 
-router.route('/ordersInCraft/:id').get(
+router.route('/').get(
     authController.protect,
     authController.restrictTo('worker','admin'),
     orderController.getAllOrders);

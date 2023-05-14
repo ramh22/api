@@ -24,7 +24,7 @@ exports.getAllOrders= catchAsync(async(req,res,next)=>{
                 orders
              },
         });
-    next();
+    //next();
 });
 /*exports.createOrder=catchAsync(async(req,res,next)=>{
       const user=await User.findById(req.userAuthId);
