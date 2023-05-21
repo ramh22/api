@@ -17,6 +17,13 @@ router
     authController.restrictTo('client','admin'),
     craftController.getCrafts, 
     craftController.getAllCrafts);
+//crafts names
+router
+  .get('/names',
+    authController.protect,
+    authController.restrictTo('worker'),
+    craftController.craftsNames, 
+    craftController.getAllCrafts);
 
    router.get('/:id',
    authController.protect,
