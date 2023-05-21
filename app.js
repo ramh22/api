@@ -37,7 +37,7 @@ app.use('/api/v1/orders',orderRoutes);
   app.all('*', (req, res, next) => {
     return next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));//update here by return
   });
-
+/*
   app.use((req, res, next) => {
     const err = new Error(`Route ${req.originalUrl} not found`);
     err.status='error';
@@ -57,7 +57,7 @@ app.use('/api/v1/orders',orderRoutes);
       message:err.message,
     });
      
-  });
+  });*/
  
   
 

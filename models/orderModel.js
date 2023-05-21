@@ -7,7 +7,10 @@ const craft=require('./../models/craftModel');
 
 const orderSchema = new mongoose.Schema(
   {
-    
+    craetedDate:{
+        type:Date,
+        default:Date.now(),},
+        
   title:{
       type:String,
       required:[true,'ادخل العنوان من فضلك'],//validate
