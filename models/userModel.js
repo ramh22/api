@@ -76,7 +76,10 @@ const userSchema = new mongoose.Schema(
         default: true,
         select: false
       },
-      avatar:String,
+      avatar:{
+        type:String,
+        default:null,
+      },
       cloudinary_id:String,  
     orders: [
       {

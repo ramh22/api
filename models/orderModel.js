@@ -7,10 +7,12 @@ const craft=require('./../models/craftModel');
 
 const orderSchema = new mongoose.Schema(
   {
-    craetedDate:{
+    createdDate:{
         type:Date,
-        default:Date.now(),},
-        
+        default:Date.now(),
+    },
+  orderedTime:Date,
+ 
   title:{
       type:String,
       required:[true,'ادخل العنوان من فضلك'],//validate
@@ -68,8 +70,6 @@ const orderSchema = new mongoose.Schema(
               ref:'Offer',  
           },
   ],
-  
-
   },
 {
   timestamps: true,
@@ -84,16 +84,21 @@ const orderSchema = new mongoose.Schema(
 // });
 orderSchema.pre(/^find/, function(next) {
     this.populate({
-      
       path: 'user',
-      select: 'name'
+      select: 'name address avatar'
     });
-  
     // this.populate({
     //   path: 'user',
     //   select: 'name photo'
     // });
     next();
   });
+  orderSchema.pre('save', function(next) {
+   this.orderedTime= ( Date.now()- this.createdDate)/1000;
+    //this.passwordChangedAt = Date.now() - 1000;
+    next();
+  });
+   
+    
 const Order = mongoose.model('Order',orderSchema);
 module.exports =Order; 

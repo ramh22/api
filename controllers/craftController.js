@@ -63,7 +63,7 @@ const crafts = await features.query;
             next();
  } );*/
  exports.getCraft=catchAsync(async(req,res,next)=>{
-const craft= await Craft.findById(req.params.id).populate('orders').select('orderDone');
+const craft= await Craft.findById(req.params.id).populate('orders');
 if (!craft) {
         return next(new AppError('No craft found with that ID', 404));
       }

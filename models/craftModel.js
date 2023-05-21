@@ -10,7 +10,6 @@ const craftSchema=new mongoose.Schema(
         type:String,
         required:[true,'a craft must have a name'],//validate,
         unique:true,
-  
         trim:true,
          maxLength:[40,'less or equal 40 character'],
          minLength:[3,'more or equal 3 character'],

@@ -18,11 +18,26 @@ const filterObj = (obj, ...allowedFields) => {
         });
         return newObj;
       };   
+      exports.OrdersForWorkers = (req, res, next) => {
+        // req.query.limit = '5';
+        // req.query.sort = 'createdAt';
+         req.query.fields = 'createdDate,title,orderDifficulty,user';
+         next();
+       };      
 exports.getAllOrders= catchAsync(async(req,res,next)=>{
   let filter={};
   if(req.params.craftId) filter={craft:req.params.craftId};
-   // const orders= await Order.find().populate('crafts','name').select('title orderDifficulty');
-   const orders= await Order.find(filter);
+  // const orders= await Order.find(filter);
+  const features = new APIFeatures(Order.find(filter), req.query)
+  .filter()
+  .sort()
+  .limitFields()
+  .paginate();
+const orders = await features.query;
+  //let filter={};
+  //if(req.params.craftId) filter={craft:req.params.craftId};
+  // // const orders= await Order.find().populate('crafts','name').select('title orderDifficulty');
+  // const orders= await Order.find(filter);
    res.status(200).json(
         {
         status :'success',
@@ -37,7 +52,7 @@ exports.getAllOrders= catchAsync(async(req,res,next)=>{
 exports.getOrderFromClient = (req, res, next) => {
   // req.query.limit = '5';
   // req.query.sort = 'createdAt';
-   req.query.fields = 'title,orderDifficulty,description,avatar,cloudinary_id,user';
+   req.query.fields = 'createdDate,title,orderDifficulty,description,avatar,cloudinary_id,user';
    next();
  };
 exports.getOrder=catchAsync(async(req,res,next)=>{

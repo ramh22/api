@@ -11,6 +11,7 @@ const router=express.Router({mergeParams:true});
 router.route('/').get(
     authController.protect,
     authController.restrictTo('worker','admin'),
+    orderController.OrdersForWorkers,
     orderController.getAllOrders);
 
     //reviewRouter.post("/:productID", isLoggedIn, createCtrl);
