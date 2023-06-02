@@ -1,9 +1,11 @@
 const userController =require( './../controllers/userController');
+//const craftController =require( './../controllers/craftController');
 const authController =require( './../controllers/authController');
 
 const upload=require('../config/cloudinary');
 const express = require('express');
 const isLogIn = require('../utils/isLoggedIn');
+//const router=express.Router({mergeParams:true});
 //const Router=express();
 const router=express.Router();
 
@@ -20,4 +22,7 @@ authController.protect,
 authController.restrictTo('worker'),
 userController.myCraft);
 
+router.get('/:id',
+    userController.getMyCraftID,
+    userController.getUser);  
 module.exports=router;

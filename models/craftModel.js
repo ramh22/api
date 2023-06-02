@@ -45,9 +45,10 @@ craftSchema.virtual('orders',{
   //virtual populate
   /*craftSchema.virtual('workers',{
     ref:'User',
-    foreignField:'craft',
+    foreignField:'MyCraft',
     localField:'_id'
-    });*/
+    });
+    */
   // craftSchema.pre(/^find/, function(next) {
   //   this.populate({
   //     path:'workers',

@@ -2,6 +2,7 @@ const craftController =require( './../controllers/craftController');
 const authController =require( './../controllers/authController');
 //const orderController =require( './../controllers/orderController');
 const orderRoutes =require( '../routes/ordersRoute');
+const userRoutes =require( '../routes/usersRoute');
 const upload=require('../config/multer');
 const isLogIn=require('../utils/isLoggedIn');
 const express = require('express');
@@ -11,6 +12,7 @@ const router=express.Router();
 
 router.use('/:craftId/orders',orderRoutes);
 router.use('/:craftId/orders/:id',orderRoutes);
+router.use('/:craftId/workers/:id',userRoutes);
 router
   .route('/')
   .get(authController.protect,
@@ -20,8 +22,8 @@ router
 //crafts names
 router
   .get('/names',
-    authController.protect,
-    authController.restrictTo('worker'),
+    //authController.protect,
+   // authController.restrictTo('worker'),
     craftController.craftsNames, 
     craftController.getAllCrafts);
 

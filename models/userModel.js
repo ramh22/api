@@ -67,6 +67,7 @@ const userSchema = new mongoose.Schema(
         {
           type:String,
           default:null,
+          trim:true,
         },
       passwordChangedAt: Date,
       passwordResetToken: String,
@@ -83,19 +84,19 @@ const userSchema = new mongoose.Schema(
       cloudinary_id:String,  
     orders: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Schema.ObjectId,
         ref: "Order",
       },
     ],
     offers: [
       {
-        type: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Schema.ObjectId,
         ref: "Offer",
       },
     ],
     reports: [
         {
-          type: mongoose.Schema.Types.ObjectId,
+          type: mongoose.Schema.ObjectId,
           ref: "Report",
         },
     ],
@@ -104,7 +105,7 @@ const userSchema = new mongoose.Schema(
       default: false,
     },
     tokens: [
-      { type: Object }
+      { type: String }
     ],
     
   
