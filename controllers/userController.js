@@ -22,9 +22,9 @@ if(!user){
   return next(new AppError('user not found',404));
 }
   res.status(200).json({
-  data:{user},
+  data:{user:user},
   });
-  next();
+
 });
  exports.myCraft=catchAsync(async(req,res,next)=>{
   //allowed nested routes
