@@ -214,3 +214,12 @@ if(!order){
             });
      //next();
 } );
+exports.getMyOrders = catchAsync(async (req, res, next) => {
+  let order = await Order.find({ user: req.user._id, craft: req.query.craftId});
+  if (!order) {
+    return next(new AppError("error, orders are not exist",404));
+  }
+  res.status(200).json({ 
+    status: "success", 
+    data:order });
+});

@@ -1,39 +1,53 @@
-const orderController =require( '../controllers/orderController');
-const authController =require( '../controllers/authController');
-const craftController =require( '../controllers/craftController');
+const orderController = require("../controllers/orderController")
+const authController = require("../controllers/authController")
+const craftController = require("../controllers/craftController")
 
-const upload=require('../config/multer');
-const isLogIn=require('../utils/isLoggedIn');
-const express = require('express');
+const upload = require("../config/multer")
+const isLogIn = require("../utils/isLoggedIn")
+const express = require("express")
 
-const router=express.Router({mergeParams:true});
+const router = express.Router({ mergeParams: true })
 
-router.route('/').get(
+router
+  .route("/myOrders")
+  .get(authController.protect, orderController.getMyOrders);
+
+router
+  .route("/:id")
+  .get(
     authController.protect,
-    authController.restrictTo('worker','admin'),
-    orderController.OrdersForWorkers,
-    orderController.getAllOrders);
-
-    //reviewRouter.post("/:productID", isLoggedIn, createCtrl);
-router.route('/').post(
-authController.protect,
-authController.restrictTo('client'),
-upload.single('image'),
-//orderController.setCraftUserIds,
-orderController.createOrder);
-
-router.route('/:id').delete(authController.protect,
-    authController.restrictTo('client','admin') ,
-    orderController.deleteOrder);
-
-router.route('/:id').get(authController.protect, 
-   // authController.restrictTo('client','admin','worker') ,
-   orderController.getOrderFromClient,
-   orderController.getOrder);  
-
-router.route('/:id').patch(
-    authController.protect, 
-    authController.restrictTo('client'),
+    // authController.restrictTo('client','admin','worker') ,
+    orderController.getOrderFromClient,
+    orderController.getOrder
+  )
+  .patch(
+    authController.protect,
+    authController.restrictTo("client"),
     upload.single("image"),
-    orderController.updateOrder);  
-module.exports= router;
+    orderController.updateOrder
+  )
+  .delete(
+    authController.protect,
+    authController.restrictTo("client", "admin"),
+    orderController.deleteOrder
+  )
+
+router
+  .route("/")
+  .get(
+    authController.protect,
+    authController.restrictTo("worker", "admin"),
+    orderController.OrdersForWorkers,
+    orderController.getAllOrders
+  )
+  .post(
+    authController.protect,
+    authController.restrictTo("client"),
+    upload.single("image"),
+    //orderController.setCraftUserIds,
+    orderController.createOrder
+  )
+
+//reviewRouter.post("/:productID", isLoggedIn, createCtrl);
+
+module.exports = router
