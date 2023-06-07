@@ -38,19 +38,19 @@ exports.getOffer = catchAsync(async (req, res,next) => {
   
 }) 
  
-exports.getMyOffers = catchAsync(async (req, res) => { 
+exports.getMyOffers = catchAsync(async (req, res,next) => { 
   const workerId = req.user.id 
   const offers = await Offer.find({ worker: workerId }) 
   if (!offers) { 
-    res.status(404).json({ 
-      status: "fail", 
-      length: offers.length, 
-      message: "there is some thing wrong while extracting your offers", 
-    }) 
-  } else { 
-    res.status(200).json({ status: "success", data: offers }) 
-  } 
-}) 
+    return next(new AppError(
+     "there is some thing wrong while extracting your offers",404
+    )); 
+  }  
+    res.status(200).json({ 
+      status: "success",
+       data: offers }) 
+  
+});
  // all offers in an order
 exports.getOffersOfAnOrder = catchAsync(async (req, res) => { 
   const order = req.query.orderId;

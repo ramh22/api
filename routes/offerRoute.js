@@ -4,7 +4,7 @@ const express = require('express');
 const router = express.Router();
  
 router.get( 
-  "/my-offers", 
+  "/myOffers", 
   authController.protect, 
   authController.restrictTo("worker"), 
   offerController.getMyOffers 
