@@ -10,6 +10,7 @@ const dbConnect=require('./config/dbConnect');
 const userRoutes =require( './routes/usersRoute');
 const craftRoutes =require( './routes/craftsRoute');
 const orderRoutes =require( './routes/ordersRoute');
+const offerRoutes = require("./routes/offerRoute");
 
 // start the express app
 
@@ -18,7 +19,7 @@ const app=express();
 
 // Development logging
 if (process.env.NODE_ENV === 'development') {
-    app.use(morgan('dev'));
+   app.use(morgan('dev'));
   }
 app.use(express.json());
    //body parser
@@ -31,7 +32,7 @@ app.use((req,res,next)=>{
 app.use('/api/v1/users',userRoutes);
 app.use('/api/v1/crafts',craftRoutes);
 app.use('/api/v1/orders',orderRoutes);
-
+app.use("/api/v1/offers", offerRoutes)
 // xss secure
 
   //route not found
