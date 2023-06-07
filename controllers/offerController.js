@@ -14,25 +14,28 @@ exports.getAllOffers = catchAsync(async (req, res) => {
   } 
 }) 
  
-exports.addOffer = catchAsync(async (req, res) => { 
+exports.addOffer = catchAsync(async (req, res,next) => { 
   const body = req.body 
   body.worker = req.user.id 
   const offer = await Offer.create(body) 
   if (!offer) { 
-    res.status(400).json({ status: "fail", message: "can't create offer" }) 
-  } else { 
+    return next(new AppError(
+      "can't create offer" ,404));
+  } 
     res.status(200).json({ status: "success", data: offer }) 
   } 
-}) 
+); 
  
 exports.getOffer = catchAsync(async (req, res,next) => { 
   const offer = await Offer.findById(req.params.id).populate("worker order") 
   if (!offer) { 
     return next(new AppError(
             "there is no offer with this id" ,404)); 
-  } else { 
-    res.status(200).json({ status: "success", data: offer }) 
   } 
+    res.status(200).json({ 
+      status: "success", 
+      data: offer });
+  
 }) 
  
 exports.getMyOffers = catchAsync(async (req, res) => { 
@@ -48,10 +51,10 @@ exports.getMyOffers = catchAsync(async (req, res) => {
     res.status(200).json({ status: "success", data: offers }) 
   } 
 }) 
- 
-exports.getOrderOffers = catchAsync(async (req, res) => { 
-  const order = req.query.orderId 
-  const offers = await Offer.find({ order }).populate("worker") 
+ // all offers in an order
+exports.getOffersOfAnOrder = catchAsync(async (req, res) => { 
+  const order = req.query.orderId;
+  const offers = await Offer.find({ order }).populate("worker");// there is worker to  a offer
   if (!offers) { 
     res.status(404).json({ 
       status: "fail", 
@@ -59,10 +62,13 @@ exports.getOrderOffers = catchAsync(async (req, res) => {
       message: 
         "there is some thing wrong while extracting order offers in order", 
     }) 
-  } else { 
-    res.status(200).json({ status: "success", data: offers }) 
   } 
-}) 
+    res.status(200).json({
+       status: "success",
+        length: offers.length,
+         data: offers }) 
+
+});
  
 exports.updateOffer = catchAsync(async (req, res) => { 
   let text, status 

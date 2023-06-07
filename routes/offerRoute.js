@@ -10,9 +10,9 @@ router.get(
   offerController.getMyOffers 
 ) 
 router.get( 
-  "/order-offers", 
+  "/offersOfAnOrder", 
   authController.protect, 
-  offerController.getOrderOffers 
+  offerController.getOffersOfAnOrder 
 ) 
 router 
   .route("/:id") 
