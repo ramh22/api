@@ -1,5 +1,6 @@
-const Offer = require("./../models/offerModel") 
-const catchAsync = require("./../utils/catchAsync") 
+const Offer = require("./../models/offerModel");
+const AppError=require('./../utils/AppError');
+const catchAsync = require("./../utils/catchAsync");
  
 exports.getAllOffers = catchAsync(async (req, res) => { 
   //no need to populate in this function cause will noe use them 
@@ -24,12 +25,11 @@ exports.addOffer = catchAsync(async (req, res) => {
   } 
 }) 
  
-exports.getOffer = catchAsync(async (req, res) => { 
+exports.getOffer = catchAsync(async (req, res,next) => { 
   const offer = await Offer.findById(req.params.id).populate("worker order") 
   if (!offer) { 
-    res 
-      .status(404) 
-      .json({ status: "fail", message: "there is no offer with this id" }) 
+    return next(new AppError(
+            "there is no offer with this id" ,404)); 
   } else { 
     res.status(200).json({ status: "success", data: offer }) 
   } 
