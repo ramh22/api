@@ -7,7 +7,7 @@ const Order=require('./../models/orderModel');
 
 const offerSchema = new mongoose.Schema(
   {
-    offer:{
+    text:{
       type: String,
       required:[true,'please add the offer'],
     },  
