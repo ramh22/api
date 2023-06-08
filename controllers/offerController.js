@@ -2,22 +2,23 @@ const Offer = require("./../models/offerModel");
 const AppError=require('./../utils/AppError');
 const catchAsync = require("./../utils/catchAsync");
  
-exports.getAllOffers = catchAsync(async (req, res) => { 
+exports.getAllOffers = catchAsync(async (req, res,next) => { 
   //no need to populate in this function cause will noe use them 
   const offers = await Offer.find() 
-  if (!offers) { 
-    res.status(400).json({ status: "fail", message: "can't get offers" }) 
-  } else { 
+  if (!offers)  { 
+    return next(new AppError(
+      "can't get  offers" ,404));
+  } 
     res 
       .status(200) 
       .json({ status: "success", length: offers.length, data: offers }) 
-  } 
+  
 }) 
  
 exports.addOffer = catchAsync(async (req, res,next) => { 
   const body = req.body 
-  body.worker = req.user.id 
-  const offer = await Offer.create(body) 
+  body.worker = req.user.id;
+  const offer = await Offer.create(body);
   if (!offer) { 
     return next(new AppError(
       "can't create offer" ,404));
@@ -70,12 +71,12 @@ exports.getOffersOfAnOrder = catchAsync(async (req, res) => {
 
 });
  
-exports.updateOffer = catchAsync(async (req, res) => { 
+exports.updateOffer = catchAsync(async (req, res,next) => { 
   let text, status 
   if (req.user.role === "worker") { 
-    text = req.body.text 
+    text = req.body.text;
   } else if (req.user.role === "client") { 
-    status = req.body.status 
+    status = req.body.status;
   } 
   const offer = await Offer.findOneAndUpdate( 
     { _id: req.params.id }, 
@@ -83,23 +84,23 @@ exports.updateOffer = catchAsync(async (req, res) => {
     { new: true } 
   ) 
   if (!offer) { 
-    res 
-      .status(404) 
-      .json({ status: "fail", message: "there is no offer with this id" }) 
-  } else { 
-    res.status(200).json({ status: "success", data: offer }) 
-  } 
+    return next (new AppError("there is no offer with this id" ,404) );
+  }
+    res.status(200).json({ 
+      status: "success",
+       data: offer }) ;
+
 }) 
-exports.deleteOffer = catchAsync(async (req, res) => { 
-  if (!(await Offer.findById(req.params.id))) { 
-    res 
-      .status(404) 
-      .json({ status: "fail", message: "there is no offer with this id" }) 
-  } else { 
+exports.deleteOffer = catchAsync(async (req, res,next) => { 
+  const offer=await Offer.findById(req.params.id);
+  //if (!(await Offer.findById(req.params.id))) { 
+    if(!offer){
+      return next(new AppError("there is no offer with this id" ,404)); 
+  } 
     await Offer.deleteOne({ _id: req.params.id }) 
     res.status(200).json({ 
       status: "success", 
       message:" the data deleted successfully", 
     }) 
-  } 
+  
 })

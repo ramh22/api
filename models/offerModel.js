@@ -9,16 +9,18 @@ const offerSchema = new mongoose.Schema(
   {
     text:{
       type: String,
-      required:[true,'please add the offer'],
+      ظظrequired:[true,'please add the offer'],
     },  
-    offerAccepted:{
+    //offerAccepted:status 
+    status:{
         type:String,
-        enum: ["accepted", "canceled"],
+        enum: ["completed", "canceled","pending"],
+        default:"pending"
     },
-    createAt:{
-    type:Date,
-    default:Date.now,
-    },
+    // createAt:{
+    // type:Date,
+    // default:Date.now,
+    // },
    // offersOfNoReaction:Array,
     //offersAccepted:Array,
     //offersdone:Array,
