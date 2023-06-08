@@ -14,7 +14,13 @@ exports.getAllOffers = catchAsync(async (req, res,next) => {
       .json({ status: "success", length: offers.length, data: offers }) 
   
 }) 
- 
+   //check if user already ordere rd in this craft
+ /* const hasoffered = orderFound?.offers?.find((offer) => {
+    return offer?.user?.toString() === req?.userAuthId?.toString();
+  });
+  if (hasoffered) {
+    return next( new AppError("You have already offered this",404));
+  }*/
 exports.addOffer = catchAsync(async (req, res,next) => { 
   const body = req.body 
   body.worker = req.user.id;
