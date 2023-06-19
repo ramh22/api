@@ -9,7 +9,7 @@ const offerSchema = new mongoose.Schema(
   {
     text:{
       type: String,
-      //required:[true,'please add the offer'],
+      required:[true,'please add the offer'],
     },  
     //offerAccepted:status 
     status:{
@@ -49,14 +49,14 @@ offerSchema.virtual('Order',{
 
 });
 //relation between offer and worker
-offerSchema.pre(/^find/, function(next) {
-  this.populate({
-    path: 'user',
-    select: 'name address avatar'
-  });
+// offerSchema.pre(/^find/, function(next) {
+//   this.populate({
+//     path: 'user',
+//     select: 'name address avatar'
+//   });
  
-  next();
-});
+//   next();
+// });
 
 const Offer = mongoose.model('Offer',offerSchema);
 module.exports =Offer; 
