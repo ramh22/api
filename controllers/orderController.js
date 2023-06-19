@@ -152,3 +152,26 @@ exports.getMyOrders = catchAsync(async (req, res, next) => {
     status: "success", 
     data:order });
 });
+// completed order
+exports.getOrderStats = catchAsync(async (req, res, next) => {
+const stats = await Order.aggregate([
+  {
+    $match: { status: 'orderDone' }
+  },
+  // {
+  //   $group: {
+  //     _id: { $toUpper: '$status' },
+  //     numOffers: { $sum: 1 },
+  //   }},
+     ]
+      );
+if(!stats){
+      return next(new AppError("there is no order with this id" ,404)); 
+    } 
+      res.status(200).json({
+        status: 'success',
+        data: {
+          stats
+        }
+      });
+    });

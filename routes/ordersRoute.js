@@ -11,6 +11,9 @@ const router = express.Router({ mergeParams: true })
 router
   .route("/myOrders")
   .get(authController.protect, orderController.getMyOrders);
+  router
+  .route("/ordersDone")
+  .get(authController.protect,orderController.getOrderStats, orderController.getMyOrders);
 
 router
   .route("/:id")
