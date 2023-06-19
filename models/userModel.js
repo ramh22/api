@@ -63,6 +63,9 @@ const userSchema = new mongoose.Schema(
         // enum:["","نجار", "سباك", "كهربائي", "نقاش", "عامل نظافة", "حداد", "صيانة اجهزة كهربائية", "عامل بناء","عميل"],
         // unique:true,
       //},
+      
+      rate:Number,
+      bio:String,
       myCraft:
         {
           type:String,

@@ -46,18 +46,21 @@ const orderSchema = new mongoose.Schema(
   rating:{
       type:mongoose.Schema.ObjectId,
           ref:'Rating',
-          
+           
       },
-  orderDone:{
-      type:Boolean,
-      default:false,
-  },
-  notDoneNotDeleteOrder://قيد التنفيذ
-  {
-      type:Boolean,
-      default:true,
-      select:false,
-  },
+      status:{type :String,
+        enum:["carryingout","waiting-offers","orderDone"],
+    default:"waiting-offers"},
+  // orderDone:{
+  //     type:Boolean,
+  //     default:false,
+  // },
+  // notDoneNotDeleteOrder://قيد التنفيذ
+  // {
+  //     type:Boolean,
+  //     default:true,
+  //     select:false,
+  // },
   //if length of the array of offers !=0 put orderHavingOffers===true 
   //every order with the same user_id + orderHavingOffers===true 
   orderHavingOffers:{
@@ -94,7 +97,7 @@ orderSchema.pre(/^find/, function(next) {
     next();
   });
   orderSchema.pre('save', function(next) {
-   this.orderedTime= ( Date.now()- this.createdDate)/1000;
+   this.orderedTime= new Date(date.year,date.month,date.day);
     //this.passwordChangedAt = Date.now() - 1000;
     next();
   });

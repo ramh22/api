@@ -1,19 +1,30 @@
 const Offer = require("./../models/offerModel");
 const AppError=require('./../utils/AppError');
 const catchAsync = require("./../utils/catchAsync");
- 
+const APIFeatures=require('./../utils/apiFeatures');
+
+
+/*
+exports.populatedWorkers = (req, res, next) => {
+        
+  req.query.fields = 'text user';
+  next();
+};  */
 exports.getAllOffers = catchAsync(async (req, res,next) => { 
   //no need to populate in this function cause will noe use them 
-  const offers = await Offer.find() 
+  const offers = await Offer.find();
   if (!offers)  { 
     return next(new AppError(
       "can't get  offers" ,404));
   } 
     res 
       .status(200) 
-      .json({ status: "success", length: offers.length, data: offers }) 
+      .json({ status: "success", 
+      length: offers.length,
+       data: {offers},
+      }); 
   
-}) 
+});
    //check if user already ordere rd in this craft
  /* const hasoffered = orderFound?.offers?.find((offer) => {
     return offer?.user?.toString() === req?.userAuthId?.toString();
@@ -43,11 +54,25 @@ exports.getOffer = catchAsync(async (req, res,next) => {
       status: "success", 
       data: offer });
   
-}) 
- 
+});
+//get my offer + the worker 
+exports.offersOfTheWorker = (req, res, next) => {
+        
+  req.query.fields = 'text status user';
+  next();
+};  
+
 exports.getMyOffers = catchAsync(async (req, res,next) => { 
   const workerId = req.user.id 
-  const offers = await Offer.find({ worker: workerId }) 
+  // const offers = await Offer.find({ worker: workerId }) 
+  const features = new APIFeatures(Offer.find({worker:workerId}), req.query)
+  .filter()
+  .sort()
+  .limitFields()
+  .paginate();
+const offers = await features.query;
+  // const workerId = req.user.id 
+  // const offers = await Offer.find({ worker: workerId }) 
   if (!offers) { 
     return next(new AppError(
      "there is some thing wrong while extracting your offers",404
@@ -55,6 +80,7 @@ exports.getMyOffers = catchAsync(async (req, res,next) => {
   }  
     res.status(200).json({ 
       status: "success",
+     length: offers.length,
        data: offers }) 
   
 });
@@ -109,4 +135,34 @@ exports.deleteOffer = catchAsync(async (req, res,next) => {
       message:" the data deleted successfully", 
     }) 
   
-})
+});
+//get offers completed
+exports.getOfferStats = catchAsync(async (req, res, next) => {
+  //var filter={};
+  //if(req.params.craftId) filter={craft:req.params.craftId};//={status:'completed'};
+  //let completedOffers=await Offer.find(filter)
+ 
+
+  const stats = await Offer.aggregate([
+    {
+      $match: { status: 'completed' }
+    },
+    // {
+    //   $group: {
+    //     _id: { $toUpper: '$status' },
+    //     numOffers: { $sum: 1 },
+    //   }},
+       ]
+        );
+        if(!stats){
+          return next(new AppError("there is no offer with this id" ,404)); 
+      } 
+        res.status(200).json({
+          status: 'success',
+          data: {
+            stats
+          }
+        });
+        
+      });
+    

@@ -49,18 +49,3 @@ if(!user){
     });
     next();
   });
-// const user=await User.findById(req.body._id);
-//   const myCraft = await User.findByIdAndUpdate({/
-//     user:req.userAuthId,
-//     myCraft:req.body.myCraft,
-// });
-// await user.save();
-// res.status(201).json({
-//   status: "success",
-//   message: "User Registered Successfully",
-//   data:{ 
-//     myCraft,
-// }
-// });
-// next();
-// });

@@ -9,21 +9,15 @@ const offerSchema = new mongoose.Schema(
   {
     text:{
       type: String,
-      ظظrequired:[true,'please add the offer'],
+      //required:[true,'please add the offer'],
     },  
     //offerAccepted:status 
     status:{
         type:String,
-        enum: ["completed", "canceled","pending"],
+        enum: ["completed", "canceled","pending","carryingout","accepted"],
         default:"pending"
     },
-    // createAt:{
-    // type:Date,
-    // default:Date.now,
-    // },
-   // offersOfNoReaction:Array,
-    //offersAccepted:Array,
-    //offersdone:Array,
+    
     worker:{
        type:mongoose.Schema.ObjectId,
        ref:'User',
@@ -53,6 +47,15 @@ offerSchema.virtual('Order',{
   foreignField:'Offer',//order
   localField:'_id'
 
+});
+//relation between offer and worker
+offerSchema.pre(/^find/, function(next) {
+  this.populate({
+    path: 'user',
+    select: 'name address avatar'
+  });
+ 
+  next();
 });
 
 const Offer = mongoose.model('Offer',offerSchema);

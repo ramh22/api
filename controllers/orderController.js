@@ -9,7 +9,7 @@ const cloudinary=require('./../config/cloudinary');
 const upload=require('../config/multer');
 const path=require('path');
 const util = require('util');
-const { isNull } = require('util');
+
 
 const filterObj = (obj, ...allowedFields) => {
   const newObj = {};
@@ -18,7 +18,7 @@ const filterObj = (obj, ...allowedFields) => {
         });
         return newObj;
       };   
-      exports.OrdersForWorkers = (req, res, next) => {
+exports.OrdersForWorkers = (req, res, next) => {
         
          req.query.fields = 'createdDate,title,orderDifficulty,user';
          next();
@@ -105,7 +105,7 @@ exports.createOrder = catchAsync(async (req, res,next) => {
 
 exports.deleteOrder=catchAsync( async (req, res,next) => {
         
-  // Find craft by id
+  // Find order by id
   let order = await Order.findById(req.params.id);///:id
   if(!order){
     return next(new AppError("order not  exists",401));
