@@ -49,14 +49,14 @@ offerSchema.virtual('Order',{
 
 });
 //relation between offer and worker
-// offerSchema.pre(/^find/, function(next) {
-//   this.populate({
-//     path: 'user',
-//     select: 'name address avatar'
-//   });
+offerSchema.pre(/^find/, function(next) {
+  this.populate({
+    path: 'worker',
+    select: 'name address avatar'
+  });
  
-//   next();
-// });
+  next();
+});
 
 const Offer = mongoose.model('Offer',offerSchema);
 module.exports =Offer; 
