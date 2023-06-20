@@ -1,4 +1,5 @@
 const Offer = require("./../models/offerModel");
+const User = require("./../models/userModel");
 const AppError=require('./../utils/AppError');
 const catchAsync = require("./../utils/catchAsync");
 const APIFeatures=require('./../utils/apiFeatures');
@@ -64,6 +65,7 @@ exports.offersOfTheWorker = (req, res, next) => {
 
 exports.getMyOffers = catchAsync(async (req, res,next) => { 
   const workerId = req.user.id 
+  
   // const offers = await Offer.find({ worker: workerId }) 
   const features = new APIFeatures(Offer.find({worker:workerId}), req.query)
   .filter()
@@ -138,11 +140,8 @@ exports.deleteOffer = catchAsync(async (req, res,next) => {
 });
 //get offers completed
 exports.getOfferStats = catchAsync(async (req, res, next) => {
-  //var filter={};
-  //if(req.params.craftId) filter={craft:req.params.craftId};//={status:'completed'};
-  //let completedOffers=await Offer.find(filter)
  
-
+  const workerId = await User.findOne({worker:req.user.id});
   const stats = await Offer.aggregate([
     {
       $match: { status: 'completed' }

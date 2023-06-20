@@ -14,7 +14,7 @@ exports.getMyCraftID = (req, res, next) => {
  exports.getProfile = (req, res, next) => {
   // req.query.limit = '5';
   // req.query.sort = 'createdAt';
-   req.query.fields = 'name address avatar';
+   req.query.fields = 'name address avatar bio rate';
    next();
  };
 exports.getUser=catchAsync(async(req,res,next)=>{

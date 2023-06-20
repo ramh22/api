@@ -64,7 +64,7 @@ const userSchema = new mongoose.Schema(
         // unique:true,
       //},
       
-      rate:Number,
+      rate:{type:Number,default:0},
       bio:String,
       myCraft:
         {

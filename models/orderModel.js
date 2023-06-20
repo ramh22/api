@@ -49,8 +49,8 @@ const orderSchema = new mongoose.Schema(
            
       },
       status:{type :String,
-        enum:["carryingout","waiting-offers","orderDone"],
-    default:"waiting-offers"},
+        enum:["carryingout","pending","orderDone"],
+        default:"pending"},
   // orderDone:{
   //     type:Boolean,
   //     default:false,

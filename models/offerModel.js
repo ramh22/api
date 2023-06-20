@@ -53,6 +53,9 @@ offerSchema.pre(/^find/, function(next) {
   this.populate({
     path: 'worker',
     select: 'name address avatar'
+  }).populate({
+    path:'order',
+    select:'user title orderDifficulty'
   });
  
   next();

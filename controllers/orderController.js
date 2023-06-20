@@ -152,7 +152,7 @@ exports.getMyOrders = catchAsync(async (req, res, next) => {
     status: "success", 
     data:order });
 });
-// completed order
+// completed order 
 exports.getOrderStats = catchAsync(async (req, res, next) => {
 const stats = await Order.aggregate([
   {

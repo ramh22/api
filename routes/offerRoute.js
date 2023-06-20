@@ -10,13 +10,14 @@ router.get(
   offerController.offersOfTheWorker, 
   offerController.getMyOffers 
 ) 
-//completed offer
+//completed offer of a worker
 router.get( 
-  "/completedOffers", 
+  "/completedOffers/:workerId", 
   authController.protect, 
-  authController.restrictTo("worker"),
-  offerController.getOfferStats, 
-  offerController.getMyOffers 
+  authController.restrictTo("worker","client"),//offerController.getMyOffers ,
+  offerController.getOfferStats,offerController.getMyOffers ,
+  
+ 
 ) 
 router.get( 
   "/offersOfAnOrder", 
