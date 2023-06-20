@@ -83,8 +83,12 @@ const userSchema = new mongoose.Schema(
       avatar:{
         type:String,
         default:null,
+    // default:'https://res.cloudinary.com/dfgrmptvf/image/upload/v1683642411/yrng0yz9lw8gcqeuuerp.png',
       },
-      cloudinary_id:String,  
+      cloudinary_id:{
+        type:String,
+       //default:'yrng0yz9lw8gcqeuuerp'
+      },  
     orders: [
       {
         type: mongoose.Schema.ObjectId,
