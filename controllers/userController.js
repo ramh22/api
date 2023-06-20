@@ -11,6 +11,12 @@ exports.getMyCraftID = (req, res, next) => {
    req.query.fields = 'myCraft';
    next();
  };
+ exports.getProfile = (req, res, next) => {
+  // req.query.limit = '5';
+  // req.query.sort = 'createdAt';
+   req.query.fields = 'name address avatar';
+   next();
+ };
 exports.getUser=catchAsync(async(req,res,next)=>{
   const features = new APIFeatures(User.findById(req.params.id), req.query)
   .filter()

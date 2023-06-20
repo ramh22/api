@@ -25,4 +25,11 @@ userController.myCraft);
 router.get('/:id',
     userController.getMyCraftID,
     userController.getUser);  
+
+    router.get('/profile/:id',
+    authController.protect,
+    userController.getProfile,
+    userController.getUser);  
+        
+
 module.exports=router;

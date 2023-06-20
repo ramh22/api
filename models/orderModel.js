@@ -97,11 +97,10 @@ orderSchema.pre(/^find/, function(next) {
     next();
   });
   orderSchema.pre('save', function(next) {
-   this.orderedTime= new Date(date.year,date.month,date.day);
-    //this.passwordChangedAt = Date.now() - 1000;
-    next();
-  });
-   
+    this.orderedTime= ( Date.now()- this.createdDate)/1000;
+     //this.passwordChangedAt = Date.now() - 1000;
+     next();
+   });
     
 const Order = mongoose.model('Order',orderSchema);
 module.exports =Order; 
