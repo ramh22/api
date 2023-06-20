@@ -18,11 +18,13 @@ router.patch('/updatePassword',
 authController.protect,
 authController.updatePassword);
 
+
 router.put('/:id',
 authController.protect,
 authController.restrictTo('worker'),
 userController.myCraft);
 
+router.route('/:id').get(userController.getUser);
 router.get('/:id',
     userController.getMyCraftID,
     userController.getUser);  

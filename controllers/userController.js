@@ -72,7 +72,7 @@ if(!user){
       // Upload image to cloudinary
       const result = await cloudinary.uploader.upload(req.file.path);
   
- const user=await User.create({
+ const user=await User.findOneAndUpdate({
     
        avatar: result.secure_url,
       cloudinary_id: result.public_id,
@@ -119,3 +119,4 @@ if(!user){
           );
    //next();
   }); 
+  

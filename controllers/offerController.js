@@ -164,4 +164,5 @@ exports.getOfferStats = catchAsync(async (req, res, next) => {
         });
         
       });
-    
+    //complete offer/:id
+    //thensame my offers
