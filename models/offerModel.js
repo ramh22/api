@@ -9,7 +9,7 @@ const offerSchema = new mongoose.Schema(
   {
     text:{
       type: String,
-      required:[true,'please add the offer'],
+     // required:[true,'please add the offer'],
     },  
     //offerAccepted:status 
     status:{

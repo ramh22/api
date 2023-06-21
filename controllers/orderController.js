@@ -20,7 +20,7 @@ const filterObj = (obj, ...allowedFields) => {
       };   
 exports.OrdersForWorkers = (req, res, next) => {
         
-         req.query.fields = 'createdDate,title,orderDifficulty,user';
+         req.query.fields = 'createdDate,title,orderDifficulty,user,status';
          next();
        };      
 exports.getAllOrders= catchAsync(async(req,res,next)=>{
