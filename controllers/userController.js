@@ -63,7 +63,7 @@ if(!user){
        
   */
  exports.addUserPhoto = catchAsync(async (req, res,next) => {
- let user = await User.findById(req.params.id);
+ const user = await User.findById(req.params.id);
   
   //const userFound = await user.findOne({ user:req.params.id });
       if (!user) {
@@ -72,7 +72,7 @@ if(!user){
       // Upload image to cloudinary
       const result = await cloudinary.uploader.upload(req.file.path);
   
-  let userUpdated=await User.findOneAndUpdate(req.params.id,{
+  let userUpdated=await User.findOneAndUpdate(req.user.id,{
     
        avatar: result.secure_url,
       cloudinary_id: result.public_id,
@@ -88,14 +88,7 @@ if(!user){
      // next();  
   });  
   exports.updateProfile= catchAsync(async(req,res,next)=>{
-      //let user = await User.findByIdAndUpdate(req.params.id);
-      // Delete image from cloudinary
-      //await cloudinary.uploader.destroy(user.cloudinary_id);
-      // Upload image to cloudinary
-      //let result;
-     // if (req.file) {
-       // result = await cloudinary.uploader.upload(req.file.path);
-      // }
+     
      
       const user=await User.findById(req.params.id);
       let updateUser = await User.findByIdAndUpdate(  req.user.id , 
