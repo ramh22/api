@@ -142,9 +142,12 @@ exports.deleteOffer = catchAsync(async (req, res,next) => {
 exports.getOfferStats = catchAsync(async (req, res, next) => {
  
   const workerId = await User.findOne({worker:req.user.id});
+  if(!workerId){
+    return next(new AppError("there is no worker with this id" ,404)); 
+  }
   const stats = await Offer.aggregate([
     {
-      $match: { status: 'completed' }
+      $match: { worker: `$workerId` }
     },
     // {
     //   $group: {
@@ -158,6 +161,7 @@ exports.getOfferStats = catchAsync(async (req, res, next) => {
       } 
         res.status(200).json({
           status: 'success',
+
           data: {
             stats
           }
@@ -166,3 +170,14 @@ exports.getOfferStats = catchAsync(async (req, res, next) => {
       });
     //complete offer/:id
     //thensame my offers
+exports.getOffersOfAnyWorker = catchAsync(async (req, res, next) => {
+  const workerId=req.query.id;
+  let offers = await Offer.find({ worker:workerId });
+  if (!offers) {
+    return next(new AppError("error, offers are not exist",404));
+  }
+  res.status(200).json({ 
+    status: "success", 
+    length:offers.length,
+    data:offers });
+});

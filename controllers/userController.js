@@ -63,29 +63,29 @@ if(!user){
        
   */
  exports.addUserPhoto = catchAsync(async (req, res,next) => {
-
-  //craft exists
-  const userFound = await user.findOne({ id:req.user.public_id });
+ let user = await User.findById(req.params.id);
+  
+  //const userFound = await user.findOne({ user:req.params.id });
       if (!user) {
           return next(new AppError("user is not exist",401));
           }
       // Upload image to cloudinary
       const result = await cloudinary.uploader.upload(req.file.path);
   
- const user=await User.findOneAndUpdate({
+  let userUpdated=await User.findOneAndUpdate(req.params.id,{
     
        avatar: result.secure_url,
       cloudinary_id: result.public_id,
-  })
-      //  await craft.save();//created at , updated at
+  },{new:true});
+    
         
           res.status(201).json({
             status: "success",
            data:{ 
-              user
+              user:userUpdated
           },
           });
-      //   
+     // next();  
   });  
   exports.updateProfile= catchAsync(async(req,res,next)=>{
       //let user = await User.findByIdAndUpdate(req.params.id);
@@ -96,14 +96,7 @@ if(!user){
      // if (req.file) {
        // result = await cloudinary.uploader.upload(req.file.path);
       // }
-      // const data = {
-      //   name: req.body.name || user.name,
-      //   avatar: result?.secure_url || user.avatar,
-      //   cloudinary_id: result?.public_id || user.cloudinary_id,
-      //   bio:req.body.name||user.bio,
-      //   rate:req.body.name||user.rate,
-      //   address:req.body.name||user.address,
-      // };
+     
       const user=await User.findById(req.params.id);
       let updateUser = await User.findByIdAndUpdate(  req.user.id , 
         req.body, 

@@ -34,10 +34,10 @@ router.get('/:id',
     userController.getProfile,
     userController.getUser);  
         
-    router.patch('/profile/:id',
+    router.patch('/image/:id',
         authController.protect,
         authController.restrictTo('worker','client'),
-        //upload.single("image"),
-        userController.updateProfile
+        upload.single("image"),
+        userController.addUserPhoto
         );
 module.exports=router;

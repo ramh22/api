@@ -12,18 +12,26 @@ router.get(
 ) 
 //completed offer of a worker
 router.get( 
-  "/completedOffers/:workerId", 
-  authController.protect, 
-  authController.restrictTo("worker","client"),//offerController.getMyOffers ,
-  offerController.getOfferStats,offerController.getMyOffers ,
+  "/offersOfWorker/:workId", 
+ // authController.protect, 
+  //authController.restrictTo("worker","client"),
+  
+  offerController.getOffersOfAnyWorker ,
   
  
 ) 
+/*
+router.get( 
+  "/completedOffers/:workId", 
+ //authController.protect, 
+  //authController.restrictTo("worker","client"),
+  offerController.getOfferStats,
+) */
 router.get( 
   "/offersOfAnOrder", 
   authController.protect, 
   offerController.getOffersOfAnOrder 
-) 
+);
 router 
   .route("/:id") 
   .all(authController.protect) 
@@ -32,7 +40,7 @@ router
   .delete( 
     authController.restrictTo("admin", "worker"), 
     offerController.deleteOffer 
-  ) 
+  );
  
 router 
   .route("/") 
