@@ -11,7 +11,7 @@ const userRoutes =require( './routes/usersRoute');
 const craftRoutes =require( './routes/craftsRoute');
 const orderRoutes =require( './routes/ordersRoute');
 const offerRoutes = require("./routes/offerRoute");
-
+const reportRoutes = require("./routes/reportRoute");
 // start the express app
 
 dbConnect();
@@ -33,6 +33,7 @@ app.use('/api/v1/users',userRoutes);
 app.use('/api/v1/crafts',craftRoutes);
 app.use('/api/v1/orders',orderRoutes);
 app.use("/api/v1/offers", offerRoutes)
+app.use("/api/v1/reports", reportRoutes);
 // xss secure
 
   //route not found
