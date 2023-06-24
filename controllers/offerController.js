@@ -52,7 +52,7 @@ tourSchema.pre('save', async function(next) {
  */
 const hasOffered = orderFound?.offers?.find((offer) => {//user=worker//
   //return offer?.user?.toString() === req?.user?.toString();
-  return offer?.worker?.toString() === req?.user?.toString();
+  return offer.worker.id === req.user.id;
  
   });
   
@@ -71,7 +71,10 @@ orderFound.offers.push(offer?._id);
 //resave
 await orderFound.save();  
 
-    res.status(201).json({ status: "success", data: offer }) 
+    res.status(201)
+    .json({
+       status: "success", 
+       data: offer }) 
   }); 
  
 exports.getOffer = catchAsync(async (req, res,next) => { 
