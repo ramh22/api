@@ -40,6 +40,12 @@ router.get('/profile/:id',
         upload.single("image"),
         userController.addUserPhoto
         );
+        router.patch('/imagesOfWorks/:id',
+        authController.protect,
+        authController.restrictTo('worker','client'),
+        upload.array("images"),
+        userController.addImagesOfWorks
+        );        
 router.patch('/profile/:id',
 authController.protect,
 authController.restrictTo('worker','client'),

@@ -88,7 +88,8 @@ const userSchema = new mongoose.Schema(
       cloudinary_id:{
         type:String,
        //default:null
-      },  
+      }, 
+      ImagesOfWorks:Array, 
     orders: [
       {
         type: mongoose.Schema.ObjectId,

@@ -119,3 +119,37 @@ if(!user){
    //next();
   }); 
   
+  exports.addImagesOfWorks = catchAsync(async (req, res,next) => {
+    //const user = await User.findById(req.params.id);
+    let user = await User.findById(req.params.id);
+     
+     //const userFound = await user.findOne({ user:req.params.id });
+         if (!user) {
+             return next(new AppError("user is not exist",404));
+             }
+         // Upload image to cloudinary
+         //const result = await cloudinary.uploader.upload(req.file.path);
+       
+       let result;
+       if (req.files) {
+         result = await cloudinary.uploader.upload(req.files.path);
+       }
+       //Images of works
+         const data={
+           avatar: result?.secure_url||user.avatar,
+          cloudinary_id: result.public_id||null,
+      }
+     let userUpdated=await User.findByIdAndUpdate(req.user.id,
+       data,
+       {
+         new:true,
+         runValidators:true
+       });
+             res.status(200).json({
+               status: "success",
+              data:{ 
+                 user:userUpdated
+             },
+             });
+        // next();  
+     });  

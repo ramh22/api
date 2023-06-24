@@ -118,7 +118,7 @@ const offers = await features.query;
     res.status(200).json({ 
       status: "success",
      length: offers.length,
-       data: {offers }});
+       data: offers });
   
 });
  // all offers in an order
