@@ -96,17 +96,20 @@ exports.offersOfTheWorker = (req, res, next) => {
 };  
 
 exports.getMyOffers = catchAsync(async (req, res,next) => { 
-  const workerId = req.user.id 
-  
+// const workerId = req.user.id 
+let workerId = await User.findById(req.params.id);
+//let filter={};
+////if(req.params.workerId) filter={worker:req.params.workerId};
+
   // const offers = await Offer.find({ worker: workerId }) 
-  const features = new APIFeatures(Offer.find({worker:workerId}), req.query)
+  const features = new APIFeatures(Offer.find({ worker: workerId }), req.query)
   .filter()
   .sort()
   .limitFields()
   .paginate();
 const offers = await features.query;
   // const workerId = req.user.id 
-   const populatedOffers = await offers.populate('worker order');
+  // const populatedOffers = await offers.populate('worker order');
   if (!offers) { 
     return next(new AppError(
      "there is some thing wrong while extracting your offers",404
@@ -115,7 +118,7 @@ const offers = await features.query;
     res.status(200).json({ 
       status: "success",
      length: offers.length,
-       data: offers }) 
+       data: {offers }});
   
 });
  // all offers in an order

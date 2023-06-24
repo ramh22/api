@@ -4,7 +4,7 @@ const express = require('express');
 const router = express.Router();
  //pending offers
 router.get( 
-  "/myOffers", 
+  "/myOffers/:id", 
   authController.protect, 
   authController.restrictTo("worker"),
   offerController.offersOfTheWorker, 
@@ -25,6 +25,7 @@ router.post('/:orderId',
 authController.protect,
 authController.restrictTo("worker"),
  offerController.addOffer);
+
 router.get( 
   "/offersOfAnOrder", 
   authController.protect, 
