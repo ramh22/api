@@ -53,7 +53,7 @@ offerSchema.virtual('Order',{
 offerSchema.pre(/^find/, function(next) {
   this.populate({
     path: 'worker',
-    select: 'name address avatar'
+    select: 'name address avatar -reports'
   }).populate({
     path:'order',
     select:'user title orderDifficulty'

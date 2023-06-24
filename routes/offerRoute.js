@@ -27,7 +27,7 @@ authController.restrictTo("worker"),
  offerController.addOffer);
 
 router.get( 
-  "/offersOfAnOrder", 
+  "/offersOfAnOrder/:orderId", 
   authController.protect, 
   offerController.getOffersOfAnOrder 
 );

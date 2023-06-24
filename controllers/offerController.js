@@ -123,8 +123,10 @@ const offers = await features.query;
 });
  // all offers in an order
 exports.getOffersOfAnOrder = catchAsync(async (req, res) => { 
-  const order = req.query.orderId;
-  const offers = await Offer.find({ order }).populate("worker");// there is worker to  a offer
+  let filter={};
+  if(req.params.orderId) filter={order:req.params.orderId};
+  //let orderId = await Order.findById(req.params.id);
+  const offers = await Offer.find(filter).populate("worker");// there is worker to  a offer
   if (!offers) { 
     res.status(404).json({ 
       status: "fail", 
@@ -136,7 +138,7 @@ exports.getOffersOfAnOrder = catchAsync(async (req, res) => {
     res.status(200).json({
        status: "success",
         length: offers.length,
-         data: offers }) 
+         data: {offers} }) 
 
 });
  
