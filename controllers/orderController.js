@@ -4,7 +4,6 @@ const User =require('./../models/userModel');
 const catchAsync=require('./../utils/catchAsync');
 const AppError=require('./../utils/AppError');
 const APIFeatures=require('./../utils/apiFeatures');
-const isLogIn=require('../utils/isLoggedIn');
 const cloudinary=require('./../config/cloudinary');
 const upload=require('../config/multer');
 const path=require('path');

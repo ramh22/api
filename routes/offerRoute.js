@@ -20,13 +20,11 @@ router.get(
   
  
 ) 
-/*
-router.get( 
-  "/completedOffers/:workId", 
- //authController.protect, 
-  //authController.restrictTo("worker","client"),
-  offerController.getOfferStats,
-) */
+
+router.post('/:orderId',
+authController.protect,
+authController.restrictTo("worker"),
+ offerController.addOffer);
 router.get( 
   "/offersOfAnOrder", 
   authController.protect, 
@@ -45,7 +43,7 @@ router
 router 
   .route("/") 
   .all(authController.protect) 
-  .get(authController.restrictTo("admin"),offerController.offersOfTheWorker, offerController.getAllOffers) 
-  .post(authController.restrictTo("worker"), offerController.addOffer);
+  .get(authController.restrictTo("admin"),offerController.offersOfTheWorker, offerController.getAllOffers) ;
+
  
 module.exports = router

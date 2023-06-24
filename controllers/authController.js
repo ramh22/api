@@ -99,7 +99,7 @@ exports.protect = catchAsync(async (req, res, next) => {
         new AppError('User recently changed password! Please log in again.', 401)
       );
     }
-    // GRANT ACCESS TO PROTECTED ROUTE
+    // GRANT ACCESS TO PROTECTED ROUTE       req.user.id
     req.user = currentUser;
     next();
 

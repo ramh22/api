@@ -1,4 +1,5 @@
 const User =require( './../models/userModel');
+const Report =require( './../models/reportModel');
 const Craft =require( './../models/craftModel');
 const catchAsync=require('./../utils/catchAsync');
 const APIFeatures=require('./../utils/apiFeatures');
@@ -20,6 +21,9 @@ exports.getMyCraftID = (req, res, next) => {
    req.query.fields = 'name address avatar bio rate';
    next();
  };
+ //const craft = await features.query;//populate('orders')
+// const populatedCraft=  craft.populate('orders');//findById(req.params.id);
+ 
 exports.getUser=catchAsync(async(req,res,next)=>{
   const features = new APIFeatures(User.findById(req.params.id), req.query)
   .filter()
@@ -27,11 +31,12 @@ exports.getUser=catchAsync(async(req,res,next)=>{
   .limitFields()
   .paginate();
 const user = await features.query;
+//const populatedUser=user.populate('reports');
 if(!user){
   return next(new AppError('user not found',404));
 }
   res.status(200).json({
-  data:{user:user},
+  data:{user}//{user:populatedUser},
   });
 
 });
@@ -63,23 +68,31 @@ if(!user){
        
   */
  exports.addUserPhoto = catchAsync(async (req, res,next) => {
- const user = await User.findById(req.params.id);
+ //const user = await User.findById(req.params.id);
+ let user = await User.findById(req.params.id);
   
   //const userFound = await user.findOne({ user:req.params.id });
       if (!user) {
-          return next(new AppError("user is not exist",401));
+          return next(new AppError("user is not exist",404));
           }
       // Upload image to cloudinary
-      const result = await cloudinary.uploader.upload(req.file.path);
-  
-  let userUpdated=await User.findOneAndUpdate(req.user.id,{
+      //const result = await cloudinary.uploader.upload(req.file.path);
     
-       avatar: result.secure_url,
-      cloudinary_id: result.public_id,
-  },{new:true});
-    
-        
-          res.status(201).json({
+    let result;
+    if (req.file) {
+      result = await cloudinary.uploader.upload(req.file.path);
+    }
+      const data={
+        avatar: result?.secure_url||user.avatar,
+       cloudinary_id: result.public_id||null,
+   }
+  let userUpdated=await User.findByIdAndUpdate(req.user.id,
+    data,
+    {
+      new:true,
+      runValidators:true
+    });
+          res.status(200).json({
             status: "success",
            data:{ 
               user:userUpdated

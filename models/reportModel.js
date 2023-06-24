@@ -24,8 +24,15 @@ const reportSchema=new mongoose.Schema(
     }, { toJSON: { virtuals: true },
     timestamps:true,
  },
-  { toObject: { virtuals: true } });
+  { toObject: { virtuals: true }
+ });
 
+  reportSchema.virtual('User',{
+    ref:'User',
+    foreignField:'Report',
+    localField:'_id'
+  
+  });
 reportSchema.index({user:1,user:1},{unique:true});
  const Report = mongoose.model('Report',reportSchema);
 module.exports =Report;

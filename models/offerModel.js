@@ -35,6 +35,7 @@ const offerSchema = new mongoose.Schema(
  },
   { toObject: { virtuals: true } }
 );
+offerSchema.index({ order: 1, worker: 1 }, { unique: true });
 
 offerSchema.virtual('User',{
   ref:'User',

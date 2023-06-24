@@ -29,7 +29,7 @@ router.get('/:id',
     userController.getMyCraftID,
     userController.getUser);  
 
-    router.get('/profile/:id',
+router.get('/profile/:id',
     authController.protect,
     userController.getProfile,
     userController.getUser);  
@@ -40,4 +40,9 @@ router.get('/:id',
         upload.single("image"),
         userController.addUserPhoto
         );
+router.patch('/profile/:id',
+authController.protect,
+authController.restrictTo('worker','client'),
+userController.updateProfile
+);
 module.exports=router;

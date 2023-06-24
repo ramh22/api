@@ -87,7 +87,7 @@ const userSchema = new mongoose.Schema(
       },
       cloudinary_id:{
         type:String,
-       //default:'yrng0yz9lw8gcqeuuerp'
+       //default:null
       },  
     orders: [
       {
@@ -101,12 +101,12 @@ const userSchema = new mongoose.Schema(
         ref: "Offer",
       },
     ],
-    reports: [
-        {
-          type: mongoose.Schema.ObjectId,
-          ref: "Report",
-        },
-    ],
+    // reports: [
+    //     {
+    //       type: mongoose.Schema.ObjectId,
+    //       ref: "Report",
+    //     },
+    // ],
     isAdmin: {
       type: Boolean,
       default: false,
@@ -144,13 +144,23 @@ const userSchema = new mongoose.Schema(
       this.passwordChangedAt = Date.now() - 1000;
       next();
     });
-    
+    userSchema.virtual('reports',{
+      ref:'Report',
+      foreignField:'reported',
+      localField:'_id'
+      });
     userSchema.pre(/^find/, function(next) {
       // this points to the current query
       this.find({ active: { $ne: false } });
       next();
     });
-    
+  userSchema.pre(/^find/, function(next) {
+     this.populate({
+     path:'reports',
+       select:'report'
+});
+       next();
+   });
     userSchema.methods.correctPassword = async function(
       passwordCurrent,
       userPassword
@@ -164,10 +174,8 @@ const userSchema = new mongoose.Schema(
           this.passwordChangedAt.getTime() / 1000,
           10
         );
-    
         return JWTTimestamp < changedTimestamp;
       }
-    
       // False means NOT changed
       return false;
     };

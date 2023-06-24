@@ -1,5 +1,6 @@
 const Offer = require("./../models/offerModel");
 const User = require("./../models/userModel");
+const Order = require("./../models/orderModel");
 const AppError=require('./../utils/AppError');
 const catchAsync = require("./../utils/catchAsync");
 const APIFeatures=require('./../utils/apiFeatures');
@@ -34,16 +35,44 @@ exports.getAllOffers = catchAsync(async (req, res,next) => {
     return next( new AppError("You have already offered this",404));
   }*/
 exports.addOffer = catchAsync(async (req, res,next) => { 
-  const body = req.body 
-  body.worker = req.user.id;
-  const offer = await Offer.create(body);
-  if (!offer) { 
+  const {text,status}=req.body;
+  const {orderId}=req.params;
+  const orderFound = await Order.findById(orderId).populate("offers");
+  if (!orderFound) { 
     return next(new AppError(
-      "can't create offer" ,404));
+      " order not found " ,404));
   } 
-    res.status(200).json({ status: "success", data: offer }) 
-  } 
-); 
+  /*
+  
+tourSchema.pre('save', async function(next) {
+  const guidesPromises = this.guides.map(async id => await User.findById(id));
+  this.guides = await Promise.all(guidesPromises);
+  next();
+});
+ */
+const hasOffered = orderFound?.offers?.find((offer) => {//user=worker//
+  //return offer?.user?.toString() === req?.user?.toString();
+  return offer?.worker?.toString() === req?.user?.toString();
+ 
+  });
+  
+  if (hasOffered) {
+    return next(new AppError("You have already added your offer",404));
+  }
+//create review
+const offer = await Offer.create({
+  text,
+  status,
+  order:orderFound?._id,
+  worker:req.user.id,
+});
+//Push offer into order Found
+orderFound.offers.push(offer?._id);
+//resave
+await orderFound.save();  
+
+    res.status(201).json({ status: "success", data: offer }) 
+  }); 
  
 exports.getOffer = catchAsync(async (req, res,next) => { 
   const offer = await Offer.findById(req.params.id).populate("worker order") 
@@ -74,7 +103,7 @@ exports.getMyOffers = catchAsync(async (req, res,next) => {
   .paginate();
 const offers = await features.query;
   // const workerId = req.user.id 
-  // const offers = await Offer.find({ worker: workerId }) 
+   const populatedOffers = await offers.populate('worker order');
   if (!offers) { 
     return next(new AppError(
      "there is some thing wrong while extracting your offers",404

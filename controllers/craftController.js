@@ -51,9 +51,7 @@ const crafts = await features.query;
   const craft = await features.query;//populate('orders')
     const populatedCraft=  craft.populate('orders');//findById(req.params.id);
     
-    if (!craft) {
-        return next(new AppError('No craft found with that ID', 404));
-      }
+   
         res.status(200).json({
                 status :'success',
                 data:
