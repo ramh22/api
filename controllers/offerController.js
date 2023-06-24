@@ -138,7 +138,7 @@ exports.getOffersOfAnOrder = catchAsync(async (req, res) => {
     res.status(200).json({
        status: "success",
         length: offers.length,
-         data: {offers} }) 
+         data: offers }) 
 
 });
  
