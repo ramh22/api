@@ -153,3 +153,32 @@ if(!user){
              });
         // next();  
      });  
+     exports.getUsersOfCraft= catchAsync(async (req, res, next) => {
+      const {craftId}=req.params;
+      const craft=await Craft.findById(craftId);
+      if(!craft){
+        return next(new AppError('craft not find',404));
+      }
+      let mycraft=craftId.toString();
+      const stats = await User.find({myCraft:'$mycraft'});
+      //await User.aggregate([
+        //{
+          //$match: { myCraft: '$craftId' }
+        //},
+        // {
+        //   $group: {
+        //     _id: { $toUpper: '$status' },
+        //     numOffers: { $sum: 1 },
+        //   }},
+          // ]
+            //);
+      // if(!stats){
+      //       return next(new AppError("there is no order with this id" ,404)); 
+      //     } 
+            res.status(200).json({
+              status: 'success',
+              data: {
+                stats
+              }
+            });
+          });     

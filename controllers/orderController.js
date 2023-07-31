@@ -164,6 +164,32 @@ const stats = await Order.aggregate([
   //   }},
      ]
       );
+      exports.getMyTours = catchAsync(async (req, res, next) => {
+        // 1) Find all bookings
+        const bookings = await Booking.find({ user: req.user.id });
+      
+        // 2) Find tours with the returned IDs
+        const tourIDs = bookings.map(el => el.tour);
+        const tours = await Tour.find({ _id: { $in: tourIDs } });
+      
+        res.status(200).render('overview', {
+          title: 'My Tours',
+          tours
+        });
+      });
+      /*exports.getMyTours = catchAsync(async (req, res, next) => {
+        // 1) Find all bookings
+        const bookings = await Booking.find({ user: req.user.id });
+      
+        // 2) Find tours with the returned IDs
+        const tourIDs = bookings.map(el => el.tour);
+        const tours = await Tour.find({ _id: { $in: tourIDs } });
+      
+        res.status(200).render('overview', {
+          title: 'My Tours',
+          tours
+        });
+      });*/
 if(!stats){
       return next(new AppError("there is no order with this id" ,404)); 
     } 

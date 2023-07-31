@@ -5,7 +5,8 @@ const validator=require('validator');
 
 const reportSchema=new mongoose.Schema(
     {
-       report:{ type:[String],
+       text:{ 
+        type:String,
         required:[true,'please add the report'],
        },
 
@@ -33,6 +34,7 @@ const reportSchema=new mongoose.Schema(
     localField:'_id'
   
   });
-reportSchema.index({user:1,user:1},{unique:true});
+  
+//reportSchema.index({user:1,user:1},{unique:true});
  const Report = mongoose.model('Report',reportSchema);
 module.exports =Report;

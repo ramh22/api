@@ -51,18 +51,7 @@ const orderSchema = new mongoose.Schema(
       status:{type :String,
         enum:["carryingout","pending","orderDone"],
         default:"pending"},
-  // orderDone:{
-  //     type:Boolean,
-  //     default:false,
-  // },
-  // notDoneNotDeleteOrder://قيد التنفيذ
-  // {
-  //     type:Boolean,
-  //     default:true,
-  //     select:false,
-  // },
-  //if length of the array of offers !=0 put orderHavingOffers===true 
-  //every order with the same user_id + orderHavingOffers===true 
+  
   orderHavingOffers:{
       type:Boolean,
       default:false,
@@ -80,11 +69,7 @@ const orderSchema = new mongoose.Schema(
 {toJSON:{virtuals:true}},
 {toObject:{virtuals:true}}
 ); 
-// orderSchema.virtual('crafts',{
-//     ref:'Craft',
-//     foreignField:'Order',
-//     localField:'_id'
-// });
+
 orderSchema.pre(/^find/, function(next) {
     this.populate({
       path: 'user',

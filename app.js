@@ -12,6 +12,7 @@ const craftRoutes =require( './routes/craftsRoute');
 const orderRoutes =require( './routes/ordersRoute');
 const offerRoutes = require("./routes/offerRoute");
 const reportRoutes = require("./routes/reportRoute");
+const ratingRoutes = require("./routes/ratingRoute");
 // start the express app
 
 dbConnect();
@@ -34,6 +35,7 @@ app.use('/api/v1/crafts',craftRoutes);
 app.use('/api/v1/orders',orderRoutes);
 app.use("/api/v1/offers", offerRoutes)
 app.use("/api/v1/reports", reportRoutes);
+app.use("/api/v1/ratings", ratingRoutes);
 // xss secure
 
   //route not found
@@ -62,7 +64,6 @@ app.use("/api/v1/reports", reportRoutes);
      
   });
  
-  
 
 //app.use(globalErrorHandler);
 //app.use(ErrorRequestHandler);

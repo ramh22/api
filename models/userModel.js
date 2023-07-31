@@ -51,18 +51,8 @@ const userSchema = new mongoose.Schema(
         },
         trim:true,
       },
-      // push craft name in this array 
-      //  crafts: [
-      //   {
-      //     type: mongoose.Schema.Types.ObjectId,
-      //     ref: "Craft",
-      //   },
-      // ],
-       //{
-        // type:String,
-        // enum:["","نجار", "سباك", "كهربائي", "نقاش", "عامل نظافة", "حداد", "صيانة اجهزة كهربائية", "عامل بناء","عميل"],
-        // unique:true,
-      //},
+  
+     
       
       rate:{type:Number,default:0},
       bio:{type:String,default:null},
@@ -83,8 +73,7 @@ const userSchema = new mongoose.Schema(
       avatar:{
         type:String,
         default:null,
-    // default:'https://res.cloudinary.com/dfgrmptvf/image/upload/v1683642411/yrng0yz9lw8gcqeuuerp.png',
-      },
+     },
       cloudinary_id:{
         type:String,
        //default:null
@@ -102,12 +91,12 @@ const userSchema = new mongoose.Schema(
         ref: "Offer",
       },
     ],
-    // reports: [
-    //     {
-    //       type: mongoose.Schema.ObjectId,
-    //       ref: "Report",
-    //     },
-    // ],
+    reports: [
+        {
+          type: mongoose.Schema.ObjectId,
+          ref: "Report",
+        },
+    ],
     isAdmin: {
       type: Boolean,
       default: false,
@@ -115,7 +104,12 @@ const userSchema = new mongoose.Schema(
     tokens: [
       { type: String }
     ],
-    
+    otp:Number,
+    otp_expire:Date,
+    is_verified:{
+      type:Boolean,
+      default:false,
+    }
   
     
   },{
@@ -124,9 +118,12 @@ const userSchema = new mongoose.Schema(
 },
   {toObject:{virtuals:true}}
   ); 
-    //   phone: {
-    //     type: String,
-    //   },
+  
+  // userSchema.virtual('reports',{
+  //   ref:'Report',
+  //   foreignField:'user',//reported
+  //   localField:'_id'
+  //   });
     userSchema.pre('save', async function(next) {
       // Only run this function if password was actually modified
       if (!this.isModified('password')) return next();
@@ -145,11 +142,7 @@ const userSchema = new mongoose.Schema(
       this.passwordChangedAt = Date.now() - 1000;
       next();
     });
-    userSchema.virtual('reports',{
-      ref:'Report',
-      foreignField:'reported',
-      localField:'_id'
-      });
+   
     userSchema.pre(/^find/, function(next) {
       // this points to the current query
       this.find({ active: { $ne: false } });
@@ -181,7 +174,7 @@ const userSchema = new mongoose.Schema(
       return false;
     };
     //create password and reset token
-    userSchema.methods.resetToken = function() {
+    userSchema.methods.createPasswordResetToken = function() {
       const resetToken = crypto.randomBytes(32).toString('hex');
     
       this.passwordResetToken = crypto
@@ -189,7 +182,7 @@ const userSchema = new mongoose.Schema(
         .update(resetToken)
         .digest('hex');
     
-      console.log({ resetToken }, this.passwordResetToken);
+      console.log({ resetToken } , this.passwordResetToken);
     
       this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
     

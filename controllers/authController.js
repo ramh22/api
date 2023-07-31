@@ -3,6 +3,7 @@ const mongoose=require('mongoose');
 const dotenv=require('dotenv').config({path:`${__dirname}/problem`}); 
 const crypto=require('crypto');
 const bcrypt=require('bcryptjs');
+//const Buffer=require('buffer');
 const http=require('http');
 const User =require('../models/userModel');
 const {promisify}=require('util');
@@ -31,12 +32,12 @@ const signToken = id => {
 exports.register=catchAsync(async(req,res,next)=>{
    // const { name, email,address,role,myCraft,password,passwordConfirm} = req.body;
     const { name, email,address,role,password,passwordConfirm} = req.body;
+  
     const user = await User.create({
         name,
         email,
         address,
         role,
-        //myCraft,
         password,
         passwordConfirm,
       });
@@ -123,13 +124,9 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
     return next(new AppError('There is no user with email address.', 404));
   }
   // 2) Generate the random reset token
-  const resetToken = async function(
-    passwordCurrent,
-    userPassword
-  ) {
-    return await bcrypt.compare(passwordCurrent, userPassword);
-  };
-   user.resetToken();
+  const resetToken =user.createPasswordResetToken();
+ 
+
   await user.save({ validateBeforeSave: false });
   // 3) Send it to user's email
   const resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${resetToken}`;
@@ -153,8 +150,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
     return next(
       new AppError('There was an error sending the email. Try again later!'),
       500
-    );
-  }
+    ); }
 });
 exports.resetPassword = catchAsync(async (req, res, next) => {
   // 1) Get user based on the token
@@ -182,6 +178,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   // 4) Log the user in, send JWT
   createSendToken(user, 200, res);
 });
+
 exports.updatePassword = catchAsync(async (req, res, next) => {
   // 1) Get user from collection
   const user = await User.findById(req.user.id).select('+password');
@@ -200,3 +197,4 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   // 4) Log user in, send JWT
   createSendToken(user, 200, res);
 });
+

@@ -4,8 +4,7 @@ const express = require('express');
 const router=express.Router();
 
 router
-.route('/:reportedID')
-.post(authController.protect,
+.post('/:reportedId',authController.protect,
     authController.restrictTo('worker','client'),
     reportController.addReport);
 module.exports=router;

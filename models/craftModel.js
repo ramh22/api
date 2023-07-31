@@ -18,18 +18,7 @@ const craftSchema=new mongoose.Schema(
     avatar:String,
     cloudinary_id:String,
     slug:String,
-    // workers: [
-    //     {
-    //       type: mongoose.Schema.ObjectId,
-    //       ref: "User",
-    //     },
-    //   ],
-    // orders: [
-    //     {
-    //       type: mongoose.Schema.ObjectId,
-    //       ref: "Order",
-    //     },
-    //   ],
+  
   },
     {
         timestamps:true
@@ -42,19 +31,7 @@ craftSchema.virtual('orders',{
   foreignField:'craft',
   localField:'_id'
   });
-  //virtual populate
-  /*craftSchema.virtual('workers',{
-    ref:'User',
-    foreignField:'MyCraft',
-    localField:'_id'
-    });
-    */
-  // craftSchema.pre(/^find/, function(next) {
-  //   this.populate({
-  //     path:'workers',
-  //     select:'name -__v -passwordChangedAt'});
-  //     next();
-  // });
+  
      
     const Craft = mongoose.model('Craft',craftSchema);
 module.exports =Craft; 

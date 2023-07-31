@@ -1,5 +1,5 @@
 const userController =require( './../controllers/userController');
-//const craftController =require( './../controllers/craftController');
+const craftController =require( './../controllers/craftController');
 const authController =require( './../controllers/authController');
 
 const upload=require('../config/multer');
@@ -51,4 +51,5 @@ authController.protect,
 authController.restrictTo('worker','client'),
 userController.updateProfile
 );
+router.get('/workersOfCraft/:craftId',userController.getUsersOfCraft);
 module.exports=router;

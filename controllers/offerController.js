@@ -27,13 +27,7 @@ exports.getAllOffers = catchAsync(async (req, res,next) => {
       }); 
   
 });
-   //check if user already ordere rd in this craft
- /* const hasoffered = orderFound?.offers?.find((offer) => {
-    return offer?.user?.toString() === req?.userAuthId?.toString();
-  });
-  if (hasoffered) {
-    return next( new AppError("You have already offered this",404));
-  }*/
+ 
 exports.addOffer = catchAsync(async (req, res,next) => { 
   const {text,status}=req.body;
   const {orderId}=req.params;
@@ -42,16 +36,9 @@ exports.addOffer = catchAsync(async (req, res,next) => {
     return next(new AppError(
       " order not found " ,404));
   } 
-  /*
-  
-tourSchema.pre('save', async function(next) {
-  const guidesPromises = this.guides.map(async id => await User.findById(id));
-  this.guides = await Promise.all(guidesPromises);
-  next();
-});
- */
+
 const hasOffered = orderFound?.offers?.find((offer) => {//user=worker//
-  //return offer?.user?.toString() === req?.user?.toString();
+  
   return offer.worker.id === req.user.id;
  
   });

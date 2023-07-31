@@ -1,6 +1,7 @@
 MONGO_URL=mongodb+srv://ramh:F4b6LnDWUDk1mSkm@cluster0r.fqdymql.mongodb.net/crafts?retryWrites=true&w=majority
 
 PORt=10000
+NODE_ENV=development 
 JWT_KEY=we-computer-science-students-ramh 
 JWT_EXPIRES_IN=60d
 

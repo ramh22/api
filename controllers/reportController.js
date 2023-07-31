@@ -4,34 +4,23 @@ const AppError=require('./../utils/AppError');
 const catchAsync = require("./../utils/catchAsync");
 const APIFeatures=require('./../utils/apiFeatures');
 exports.addReport = catchAsync(async (req, res,next) => {
-    //allowed nested routes
+  const {text}=req.body;
     //1. Find the reported user
-  const { reportedID } = req.params;
-  const reportedIDFound = await User.findById(reportedID).populate("reports");
-  if (!reportedIDFound) {
-    return next( new AppError("user  Not Found",404));
-  }
-   //check if user already reported this reported user
-   const hasReported = reportedIDFound?.reports?.find((report) => {
-    return report?.reporter?.toString() === req?.userAuthId.toString();
-  });
-  if (hasReported) {
-    throw new Error("You have already reported this user");
-  }
-  const {report,reporter,reported}=req.body;
+   if (!req.body.reported) req.body.reported = req.params.reportedId;
     if (!req.body.reporter) req.body.reporter = req.user.id;//from protect middleware
-   // const {report,reporter,reported}=req.body;
-    
+  
+  // const { reportedID } = req.params;
+// const  reported= await User.findById(req.params.reportedId);//.populate("reports");
+//   if (!reported) {
+//     return next( new AppError("user  Not Found",404));
+//   } 
    //create report
     const newReport = await Report.create({
-         report,
-         reported: reportedIDFound?._id,
-         reporter: req.userAuthId,
+         text,
+         reported: req.params.reportedId,
+         reporter: req.user.id,
         });
-    //Push report into reported user database
-  reportedIDFound.reports.push(report?._id);
-  //resave
-  await reportedIDFound.save();
+  
     res.status(201).json({
       status:"success",
      data:{
